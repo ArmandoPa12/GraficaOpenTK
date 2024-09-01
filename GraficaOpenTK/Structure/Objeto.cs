@@ -8,8 +8,8 @@ namespace GraficaOpenTK.Structure
 {
     public class Objeto
     {
-        private IDictionary<string, Poligono> listaPoligonos;
-        private Punto centro;
+        public IDictionary<string, Poligono> listaPoligonos { get; set; } = new Dictionary<string,Poligono>();
+        public Punto centro { get; set; } = new Punto();
 
         public Objeto()
         {

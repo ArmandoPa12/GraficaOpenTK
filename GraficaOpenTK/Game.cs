@@ -112,69 +112,104 @@ namespace GraficaOpenTK
     
         public void inicializaraCubo()
         {
-            Punto a = new Punto(-0.2, 0.2, 0.0);
-            Punto b = new Punto(-0.2, -0.2, 0.0);
-            Punto c = new Punto(0.2, -0.2, 0.0);
-            Punto d = new Punto(0.2, 0.2, 0.0);
+            //Punto a = new Punto(-0.2, 0.2, 0.0);
+            //Punto b = new Punto(-0.2, -0.2, 0.0);
+            //Punto c = new Punto(0.2, -0.2, 0.0);
+            //Punto d = new Punto(0.2, 0.2, 0.0);
 
-            Punto a1 = new Punto(-0.2, 0.2, 0.2);
-            Punto b1 = new Punto(-0.2, -0.2, 0.2);
-            Punto c1 = new Punto(0.2, -0.2, 0.2);
-            Punto d1 = new Punto(0.2, 0.2, 0.2);
+            //Punto a1 = new Punto(-0.2, 0.2, 0.2);
+            //Punto b1 = new Punto(-0.2, -0.2, 0.2);
+            //Punto c1 = new Punto(0.2, -0.2, 0.2);
+            //Punto d1 = new Punto(0.2, 0.2, 0.2);
 
-            // vacios 
-            Poligono front = new Poligono();
-            Poligono back = new Poligono();
-            Poligono left = new Poligono();
-            Poligono right = new Poligono();
-            Poligono up = new Poligono();
-            Poligono down = new Poligono();
-
-
-            front.add(a);
-            front.add(b);
-            front.add(c);
-            front.add(d);
-
-            back.add(a1);
-            back.add(b1);
-            back.add(c1);
-            back.add(d1);
-
-            left.add(a);
-            left.add(a1);
-            left.add(b1);
-            left.add(b);
-
-            right.add(d);
-            right.add(d1);
-            right.add(c1);
-            right.add(c);
-
-            up.add(a);
-            up.add(a1);
-            up.add(d1);
-            up.add(d);
-
-            down.add(b);
-            down.add(b1);
-            down.add(c1);
-            down.add(c);
-
-            Objeto cubo = new Objeto();
-            cubo.add("front", front);
-            cubo.add("back", back);
-            cubo.add("left", left);
-            cubo.add("right", right);
-            cubo.setCentro(new Punto(0.4, 0.4, 0.1));
+            //// vacios 
+            //Poligono front = new Poligono();
+            //Poligono back = new Poligono();
+            //Poligono left = new Poligono();
+            //Poligono right = new Poligono();
+            //Poligono up = new Poligono();
+            //Poligono down = new Poligono();
 
 
-            Console.WriteLine(JsonSerializer.Serialize(cubo));
+            //front.add(a);
+            //front.add(b);
+            //front.add(c);
+            //front.add(d);
 
-            escario.add("cubo", cubo);
+            //back.add(a1);
+            //back.add(b1);
+            //back.add(c1);
+            //back.add(d1);
+
+            //left.add(a);
+            //left.add(a1);
+            //left.add(b1);
+            //left.add(b);
+
+            //right.add(d);
+            //right.add(d1);
+            //right.add(c1);
+            //right.add(c);
+
+            //up.add(a);
+            //up.add(a1);
+            //up.add(d1);
+            //up.add(d);
+
+            //down.add(b);
+            //down.add(b1);
+            //down.add(c1);
+            //down.add(c);
+
+            //Objeto cubo = new Objeto();
+            //cubo.add("front", front);
+            //cubo.add("back", back);
+            //cubo.add("left", left);
+            //cubo.add("right", right);
+            //cubo.setCentro(new Punto(0.4, 0.4, 0.1));
+
+            //this.serializar("prueba2", cubo);
+
+            Objeto p = new Objeto();
+            p = this.deserializar("prueba");
+
+            escario.add("cubo", p); 
+            
 
         }
-    
+
+        public void serializar(string name, Objeto objeto, string path = @"C:\Users\Usuario\source\repos\GraficaOpenTK\GraficaOpenTK\files\")
+        {
+            string save = JsonSerializer.Serialize(objeto);
+            path += name + ".json";
+            try
+            {
+                File.WriteAllText(path, save);
+                Console.WriteLine("objeto guardado");
+            }
+            catch (Exception e)
+            {
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+        }
+        public Objeto deserializar(string name, string path = @"C:\Users\Usuario\source\repos\GraficaOpenTK\GraficaOpenTK\files\")
+        {
+            Objeto objeto = new Objeto();
+            path += name + ".json";
+            try 
+            {
+                string serie = File.ReadAllText(path);
+                objeto = JsonSerializer.Deserialize<Objeto>(serie);
+            }
+            catch (Exception e) 
+            {
+                Console.WriteLine(e.Message);
+            }
+            return objeto;
+        }
+
         public void inicializarT()
         {
             Punto p1 = new Punto(-0.3, 0.4, 0.0);

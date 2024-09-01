@@ -14,11 +14,11 @@ namespace GraficaOpenTK.Structure
 {
     public class Poligono
     {
-        private Punto ini;
-        private List<Punto> listaPuntos;
+        public Punto ini { get; set; } = new Punto();
+        public List<Punto> listaPuntos { get; set; } = new List<Punto>();
 
-        private Color color;
-        private PrimitiveType primitiveType;
+        public Color color { get; set; } = new Color();
+        public PrimitiveType primitiveType { get; set; } = new PrimitiveType();
 
         public Poligono() 
         {
@@ -60,8 +60,8 @@ namespace GraficaOpenTK.Structure
         public void draw()
         {
             GL.Color4(this.color);
-            //GL.Begin(this.primitiveType);
-            GL.Begin(PrimitiveType.Polygon);
+            GL.Begin(this.primitiveType);
+            //GL.Begin(PrimitiveType.Polygon);
 
             foreach (var item in listaPuntos)
             {   
@@ -70,21 +70,6 @@ namespace GraficaOpenTK.Structure
             GL.End();
             GL.Flush();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public void translate2() 
         {
             GL.PushMatrix();
