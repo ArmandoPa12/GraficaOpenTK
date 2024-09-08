@@ -10,6 +10,8 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using GraficaOpenTK.Structure;
 using System.Text.Json;
+using GraficaOpenTK.Class;
+
 
 namespace GraficaOpenTK
 {
@@ -18,26 +20,37 @@ namespace GraficaOpenTK
         private float angulox;
         private float anguloy;
         private float Rotar = 1.0f;
+
+        private float angle1;
+        private float angle2;
+
         private double move = 0.01;
         private double ejex;
-        //private Poligono poligono;
-        private Escenario escario;
+
+
+
+        private Escenario escenario1;
+        private Camara camara;
         public Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
         {
             ejex = 0.001;
-            escario = new Escenario();
-
+            escenario1 = new Escenario();
+            camara = new Camara(this);
             // iniciar objetos
-            inicializaraCubo();
-            inicializarT();
+            //inicializaraCubo();
+            //inicializarT();
 
         }
 
+
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
+            base.OnLoad(e); 
             GL.ClearColor(Color4.White);
-            GL.Enable(EnableCap.DepthTest);            
+            GL.Enable(EnableCap.DepthTest);
+
+            
+            //escenario1.add("letraT", letraT);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -46,11 +59,88 @@ namespace GraficaOpenTK
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            GL.LoadIdentity();
+            GL.Translate(camara.TlsX, camara.TlsY, -0.2);
+            GL.Rotate(camara.AngX, new Vector3d(1.0, 0.0, 0.0));
+            GL.Rotate(camara.AngY, new Vector3d(0.0, 1.0, 0.0));
+            GL.Rotate(camara.AngZ, new Vector3d(0.0, 0.0, 1.0));
+            double scala = camara.Scale;
+            GL.Scale(scala, scala, scala);
+
             Poligono.cartesiano();
 
-            escario.draw();
+            // arriba
+            Punto a = new Punto(-0.3, 0.4, 0.0);
+            Punto b = new Punto(-0.3, 0.2, 0.0);
+            Punto c = new Punto(0.3, 0.2, 0.0);
+            Punto d = new Punto(0.3, 0.4, 0.0);
 
-            GL.Rotate(0.10, 0.0, 0.1, 0.1);
+            Punto a1 = new Punto(-0.3, 0.4, 0.2);
+            Punto b1 = new Punto(-0.3, 0.2, 0.2);
+            Punto c1 = new Punto(0.3, 0.2, 0.2);
+            Punto d1 = new Punto(0.3, 0.4, 0.2);
+
+            Poligono aFront = new Poligono();
+            Poligono aBack = new Poligono();
+            Poligono aLeft = new Poligono();
+            Poligono aRigth = new Poligono();
+            Poligono aUp = new Poligono();
+            Poligono aDown = new Poligono();
+
+            PrimitiveType tipo = PrimitiveType.Quads;
+
+            aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(Color.Fuchsia);
+            aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(Color.Red);
+            aLeft.add(a).add(a1).add(b1).add(b).setTipo(tipo).setColor(Color.Black);
+            aRigth.add(d).add(d1).add(c1).add(c).setTipo(tipo).setColor(Color.Green);
+            aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
+            aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
+
+            aFront.draw();
+            aBack.draw();
+            aLeft.draw();
+            aRigth.draw();
+            aUp.draw();
+            aDown.draw();
+
+            Console.WriteLine(aFront.getCentro().ToString() + "f");
+            Console.WriteLine(aBack.getCentro().ToString() + "b");
+            Console.WriteLine(aLeft.getCentro().ToString() + "l");
+            Console.WriteLine(aRigth.getCentro().ToString() + "r");
+            Console.WriteLine(aUp.getCentro().ToString() + "u");
+            Console.WriteLine(aDown.getCentro().ToString() + "d");
+
+
+
+
+            //aBack.draw();
+            //aLeft.draw();
+            //aRigth.draw();
+            //aUp.draw(); 
+            //aDown.draw();
+
+            //Parte arriba = new Parte();
+            //arriba.add("arriba", aUp)
+            //    .add("abajo", aDown)
+            //    .add("frente", aFront)
+            //    .add("atras", aBack)
+            //    .add("izquierda", aLeft)
+            //    .add("derecha", aRigth);
+
+            //arriba.setCentro(new Punto(0.2,0.3,0.0));
+
+            //arriba.draw();
+            //Console.WriteLine(arriba.getCentro());
+
+
+
+
+
+
+            escenario1.draw();
+
+            GL.Flush();
+
             Context.SwapBuffers();
         }
 
@@ -62,54 +152,28 @@ namespace GraficaOpenTK
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            //angle1 += 10.0f * (float)e.Time; // Rotación en grados por segundo
-            //angle2 += 20.0f * (float)e.Time;
-
-            //this.poligono.traslate(ejex, 0.0, 0.0);
-
-
-
-            //Console.WriteLine("presionado");
-
-            base.OnUpdateFrame(e);
-            KeyboardState input = Keyboard.GetState();
-
-            if (input.IsKeyDown(Key.Escape))
-            {
-                Exit();
-            }
-            if (input.IsKeyDown(Key.Up))
-            {
-                //this.angulox += this.Rotar * (float)e.Time;
-                this.angulox += this.Rotar;
-
-            }
-            if (input.IsKeyDown(Key.Down))
-            {
-                //this.angulox -= this.Rotar * (float)e.Time;
-                this.angulox -= this.Rotar;
-            }
-            if (input.IsKeyDown(Key.Left))
-            {
-                //this.anguloy -= this.Rotar * (float)e.Time;
-                //this.anguloy -= this.Rotar;
-                this.ejex -= 0.01 * move;
-                //this.poligono.traslate(ejex, 0.0, 0.0);
-                //this.poligon.traslate(new Punto(ejex, 0.0, `0.0));
-
-            }
-            if (input.IsKeyDown(Key.Right))
-            {
-                //this.anguloy += this.Rotar * (float)e.Time;
-                //this.anguloy += this.Rotar;
-                this.ejex += 0.01 * move;
-                //this.poligono.traslate(ejex, 0.0, 0.0);
-                //this.poligono.traslate(new Punto(ejex, 0.0, 0.0));
-
-            }
-
+            base.OnUpdateFrame(e);          
         }
-    
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            camara.KeyDown(e);
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            camara.onMouseDown(e);
+        }
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            camara.MouseMove(e);
+        }
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            camara.MouseWheel(e);
+        }
+
+
         public void inicializaraCubo()
         {
             //Punto a = new Punto(-0.2, 0.2, 0.0);
@@ -168,95 +232,115 @@ namespace GraficaOpenTK
             //cubo.add("right", right);
             //cubo.setCentro(new Punto(0.4, 0.4, 0.1));
 
-            //this.serializar("prueba2", cubo);
-
-            Objeto p = new Objeto();
-            p = this.deserializar("prueba");
-
-            escario.add("cubo", p); 
             
 
-        }
 
-        public void serializar(string name, Objeto objeto, string path = @"C:\Users\Usuario\source\repos\GraficaOpenTK\GraficaOpenTK\files\")
-        {
-            string save = JsonSerializer.Serialize(objeto);
-            path += name + ".json";
-            try
-            {
-                File.WriteAllText(path, save);
-                Console.WriteLine("objeto guardado");
-            }
-            catch (Exception e)
-            {
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-        }
-        public Objeto deserializar(string name, string path = @"C:\Users\Usuario\source\repos\GraficaOpenTK\GraficaOpenTK\files\")
-        {
-            Objeto objeto = new Objeto();
-            path += name + ".json";
-            try 
-            {
-                string serie = File.ReadAllText(path);
-                objeto = JsonSerializer.Deserialize<Objeto>(serie);
-            }
-            catch (Exception e) 
-            {
-                Console.WriteLine(e.Message);
-            }
-            return objeto;
+            //Serializar.save("pruebaClass", cubo);
+
+
+            Objeto p = new Objeto();
+            p = Serializar.open("pruebaClass");
+
+            escenario1.add("cubo", p);
+
+            
         }
 
         public void inicializarT()
         {
-            Punto p1 = new Punto(-0.3, 0.4, 0.0);
-            Punto p2 = new Punto(-0.3, 0.2, 0.0);
-            Punto p3 = new Punto(-0.1, 0.2, 0.0);
-            Punto p4 = new Punto(-0.1, -0.3, 0.0);
-            Punto p5 = new Punto(0.1, -0.3, 0.0);
-            Punto p6 = new Punto(0.1, 0.2, 0.0);
-            Punto p7 = new Punto(0.3, 0.2, 0.0);
-            Punto p8 = new Punto(0.3, 0.4, 0.0);
+            // arriba
+            Punto a = new Punto(-0.3, 0.4, 0.0);
+            Punto b = new Punto(-0.3, 0.2, 0.0);
+            Punto c = new Punto(0.3, 0.2, 0.0);
+            Punto d = new Punto(0.3, 0.4, 0.0);
 
-            Punto p1a = new Punto(-0.3, 0.4, 0.2);
-            Punto p2a = new Punto(-0.3, 0.2, 0.2);
-            Punto p3a = new Punto(-0.1, 0.2, 0.2);
-            Punto p4a = new Punto(-0.1, -0.3, 0.2);
-            Punto p5a = new Punto(0.1, -0.3, 0.2);
-            Punto p6a = new Punto(0.1, 0.2, 0.2);
-            Punto p7a = new Punto(0.3, 0.2, 0.2);
-            Punto p8a = new Punto(0.3, 0.4, 0.2);
+            Punto a1 = new Punto(-0.3, 0.4, 0.2);
+            Punto b1 = new Punto(-0.3, 0.2, 0.2);
+            Punto c1 = new Punto(0.3, 0.2, 0.2);
+            Punto d1 = new Punto(0.3, 0.4, 0.2);
 
-            Poligono frontT = new Poligono();
-            Poligono backT = new Poligono();
+            Poligono aFront = new Poligono();
+            Poligono aBack = new Poligono();
+            Poligono aLeft = new Poligono();
+            Poligono aRigth = new Poligono();
+            Poligono aUp = new Poligono();
+            Poligono aDown = new Poligono();
 
-            frontT.add(p1);
-            frontT.add(p2);
-            frontT.add(p3);
-            frontT.add(p4);
-            frontT.add(p5);
-            frontT.add(p6);
-            frontT.add(p7);
-            frontT.add(p8);
+            PrimitiveType tipo = PrimitiveType.Quads;
 
-            backT.add(p1a);
-            backT.add(p2a);
-            backT.add(p3a);
-            backT.add(p4a);
-            backT.add(p5a);
-            backT.add(p6a);
-            backT.add(p7a);
-            backT.add(p8a);
+            aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(Color.Fuchsia);
+            aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(Color.Red);
+            aLeft.add(a).add(a1).add(b1).add(b).setTipo(tipo).setColor(Color.Black);
+            aRigth.add(d).add(d1).add(c1).add(c).setTipo(tipo).setColor(Color.Green);
+            aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
+            aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
 
-            Objeto tipoT = new Objeto();
-            tipoT.add("frontT", frontT);
-            tipoT.add("backT", backT);
+            //aFront.draw();
+            //aBack.draw();
+            //aLeft.draw();
+            //aRigth.draw();
+            //aUp.draw(); 
+            //aDown.draw();
 
-            tipoT.setCentro(new Punto(-0.4, -0.3, 0.0));
-            escario.add("T", tipoT);
+            // abajo
+            Punto f = new Punto(-0.1, 0.2, 0.0);
+            Punto g = new Punto(-0.1, -0.3, 0.0);
+            Punto h = new Punto(0.1, -0.3, 0.0);
+            Punto i = new Punto(0.1, 0.2, 0.0);
+
+            Punto f1 = new Punto(-0.1, 0.2, 0.2);
+            Punto g1 = new Punto(-0.1, -0.3, 0.2);
+            Punto h1 = new Punto(0.1, -0.3, 0.2);
+            Punto i1 = new Punto(0.1, 0.2, 0.2);
+
+            Poligono bFront = new Poligono();
+            Poligono bBack = new Poligono();
+            Poligono bLeft = new Poligono();
+            Poligono bRigth = new Poligono();
+            Poligono bUp = new Poligono();
+            Poligono bDown = new Poligono();
+
+            bFront.add(f).add(g).add(h).add(i).setTipo(tipo).setColor(Color.Fuchsia);
+            bBack.add(f1).add(g1).add(h1).add(i1).setTipo(tipo).setColor(Color.Red);
+            bLeft.add(f).add(f1).add(g1).add(g).setTipo(tipo).setColor(Color.Black);
+            bRigth.add(i).add(i1).add(h1).add(h).setTipo(tipo).setColor(Color.Green);
+            bUp.add(f).add(i).add(i1).add(f1).setTipo(tipo).setColor(Color.Gray);
+            bDown.add(g).add(h).add(h1).add(g1).setTipo(tipo).setColor(Color.Yellow);
+
+            //bFront.draw();
+            //bBack.draw();
+            //bLeft.draw();
+            //bRigth.draw();
+            //bUp.draw();
+            //bDown.draw();
+
+            Parte arriba = new Parte();
+            arriba.add("arriba", aUp)
+                .add("abajo", aDown)
+                .add("frente", aFront)
+                .add("atras", aBack)
+                .add("izquierda", aLeft)
+                .add("derecha", aRigth);
+
+
+            Parte abajo = new Parte();
+            abajo.add("arriba", bUp)
+                .add("abajo", bDown)
+                .add("frente", bFront)
+                .add("atras", bBack)
+                .add("izquierda", bLeft)
+                .add("derecha", bRigth);
+
+
+            //arriba.draw();
+            //abajo.draw();
+
+            Objeto letraT = new Objeto();
+            letraT.add("arriba", arriba).add("abajo", abajo);
+
+            //letraT.draw();
+
+            //Serializar.save("letraTnew", letraT);
 
         }
 

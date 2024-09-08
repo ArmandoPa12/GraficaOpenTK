@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraficaOpenTK.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace GraficaOpenTK.Structure
 {
-    public class Escenario
+    public class Escenario : IGrafica
     {
         public IDictionary<string, Objeto> listaObjetos { get; set; } = new Dictionary<string, Objeto>();
         public Punto centro { get; set; } = new Punto();
+       
         public Escenario()
         {
             centro = new Punto();
@@ -22,13 +24,18 @@ namespace GraficaOpenTK.Structure
             centro = new Punto();
             listaObjetos = objetos;
         }
-        public void add(string key, Objeto objeto)
+        public Escenario add(string key, Objeto objeto)
         {
-            listaObjetos.Add(key, objeto);
+            this.listaObjetos.Add(key, objeto);
+            return this;
         }
         public void remove(string key)
         {
             listaObjetos.Remove(key);
+        }
+        public Objeto get(string key)
+        {
+            return listaObjetos[key];
         }
         //remove
         //get
@@ -38,6 +45,11 @@ namespace GraficaOpenTK.Structure
             {
                 kvp.Value.draw();
             }
+        }
+
+        public void setCentro(Punto centro)
+        {
+            throw new NotImplementedException();
         }
     }
 }

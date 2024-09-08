@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraficaOpenTK.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,50 +7,51 @@ using System.Threading.Tasks;
 
 namespace GraficaOpenTK.Structure
 {
-    public class Objeto
+    public class Objeto : IGrafica
     {
-        public IDictionary<string, Poligono> listaPoligonos { get; set; } = new Dictionary<string,Poligono>();
+        public IDictionary<string, Parte> listaPartes { get; set; } = new Dictionary<string, Parte>();
         public Punto centro { get; set; } = new Punto();
 
         public Objeto()
         {
             centro = new Punto();
-            listaPoligonos = new Dictionary<string, Poligono>();
+            listaPartes = new Dictionary<string, Parte>();
         }
         public Objeto(Punto punto)
         {
             centro = punto;
-            listaPoligonos = new Dictionary<string, Poligono>();
+            listaPartes = new Dictionary<string, Parte>();
         }
-        public Objeto(Punto punto, IDictionary<string,Poligono> lista)
+        public Objeto(Punto punto, IDictionary<string, Parte> lista)
         {
             centro = punto;
-            listaPoligonos = lista;
+            listaPartes = lista;
         }
         
         public void setCentro(Punto newCentro)
         {
             centro = newCentro;
-            foreach (KeyValuePair<string, Poligono> kvp in listaPoligonos)
+            foreach (KeyValuePair<string, Parte> kvp in listaPartes)
             {
                 kvp.Value.setCentro(centro);
             }
         }
-        public void add(string key, Poligono poligono)
+        public Objeto add(string key, Parte parte)
         {
-            listaPoligonos.Add(key,poligono);
+            this.listaPartes.Add(key, parte);
+            return this;
         }
         public void remove(string key)
         {
-            listaPoligonos.Remove(key);
+            listaPartes.Remove(key);
         }
-        public Poligono getPoligono(string key)
+        public Parte getPoligono(string key)
         {
-            return listaPoligonos[key];
+            return listaPartes[key];
         }
         public void draw()
         {
-            foreach (KeyValuePair<string, Poligono> kvp in listaPoligonos)
+            foreach (KeyValuePair<string, Parte> kvp in listaPartes)
             {
                 kvp.Value.draw();
             }

@@ -9,12 +9,13 @@ using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Diagnostics.CodeAnalysis;
+using GraficaOpenTK.Interfaces;
 
 namespace GraficaOpenTK.Structure
 {
-    public class Poligono
+    public class Poligono : IGrafica
     {
-        public Punto ini { get; set; } = new Punto();
+        public Punto centro { get; set; } = new Punto();
         public List<Punto> listaPuntos { get; set; } = new List<Punto>();
 
         public Color color { get; set; } = new Color();
@@ -22,31 +23,30 @@ namespace GraficaOpenTK.Structure
 
         public Poligono() 
         {
-            this.ini = new Punto();
+            this.centro = new Punto();
             this.listaPuntos = new List<Punto>();
             this.color = Color.Red;
             this.primitiveType = PrimitiveType.LineLoop;
         }
         public Poligono(Punto centro)
         {
-            this.ini = centro;
+            this.centro = centro;
             this.listaPuntos = new List<Punto>();
             this.color = Color.Red;
             this.primitiveType = PrimitiveType.LineLoop;
         }
         public Poligono(List<Punto> lista ,Punto centro,Color color, PrimitiveType tipo = PrimitiveType.LineLoop)
         {
-            this.ini = centro;
+            this.centro = centro;
             this.color = color;
             this.primitiveType = tipo; 
             this.listaPuntos = lista;   
         }
-        
 
-        // agregar
-        public void add(Punto punto)
+        public Poligono add(Punto punto)
         {
             this.listaPuntos.Add(punto);
+            return this; 
         }
         public void remove(Punto punto)
         {
@@ -56,41 +56,88 @@ namespace GraficaOpenTK.Structure
         {
             return listaPuntos[x];
         }
+        
 
         public void draw()
         {
             GL.Color4(this.color);
             GL.Begin(this.primitiveType);
-            //GL.Begin(PrimitiveType.Polygon);
-
             foreach (var item in listaPuntos)
             {   
-                GL.Vertex3(item.X + ini.X, item.Y + ini.Y, item.Z + ini.Z);
+                GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
             }
             GL.End();
             GL.Flush();
         }
-        public void translate2() 
-        {
-            GL.PushMatrix();
-            GL.Translate(0.2, 0.4, 0.0);
-            this.draw();
-            GL.PopMatrix();
-
-        }
         public void setCentro(Punto newCentro)
         {
-            ini = newCentro;
+            centro = newCentro;
         }
-        //public void traslate(double X,double Y, double Z)
-        //{
-        //    foreach (KeyValuePair<string, Punto> kvp in ListaPuntos)
-        //    {
-        //        ini.X += X;
-        //        ini.Y += Y;
-        //        ini.Z += Z;                
-        //    }          
-        //}
+        public Punto getCentro()
+        {
+            return this.CalcularCentroDeMasa();
+        }
+
+        public Punto CalcularCentroDeMasa()
+        {
+            if (listaPuntos.Count == 0)
+                return new Punto(0, 0, 0);
+
+            double minX = listaPuntos.Min(p => p.X);
+            double maxX = listaPuntos.Max(p => p.X);
+
+            double minY = listaPuntos.Min(p => p.Y);
+            double maxY = listaPuntos.Max(p => p.Y);
+
+            double minZ = listaPuntos.Min(p => p.Z);
+            double maxZ = listaPuntos.Max(p => p.Z);
+
+
+            // Cálculo del centro en los ejes X y Y
+            double centroX = (minX + maxX) / 2;
+            double centroY = (minY + maxY) / 2;
+            double centroZ = (minZ+ maxZ) / 2;
+
+            return new Punto(centroX, centroY, centroZ);
+        }
+        public Poligono setTipo(PrimitiveType tipo)
+        {
+            primitiveType = tipo;
+            return this;
+        }   
+        public Poligono setColor(Color color)
+        {
+            this.color = color; 
+            return this;
+        }
+        
+
+        public void seeCenter()
+        {
+            // Dibuja el eje X centrado en ini
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color4(Color.Red);
+            GL.Vertex3(centro.X - 0.1f, centro.Y, centro.Z); // Extremo negativo del eje X
+            GL.Vertex3(centro.X + 0.1f, centro.Y, centro.Z); // Extremo positivo del eje X
+            GL.End();
+
+            // Dibuja el eje Y centrado en ini
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color4(Color.Green);
+            GL.Vertex3(centro.X, centro.Y - 0.1f, centro.Z); // Extremo negativo del eje Y
+            GL.Vertex3(centro.X, centro.Y + 0.1f, centro.Z); // Extremo positivo del eje Y
+            GL.End();
+
+            // Dibuja el eje Z centrado en ini
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color4(Color.Blue);
+            GL.Vertex3(centro.X, centro.Y, centro.Z - 0.1f); // Extremo negativo del eje Z
+            GL.Vertex3(centro.X, centro.Y, centro.Z + 0.1f); // Extremo positivo del eje Z
+            GL.End();
+
+            GL.Flush();
+        }
+
         public static void cartesiano(double escala = 0.1f)
         {
             PrimitiveType tipo = PrimitiveType.LineLoop;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK;
 
 namespace GraficaOpenTK.Structure
 {
@@ -29,5 +30,13 @@ namespace GraficaOpenTK.Structure
         {
             X = p.X; Y = p.Y; Z = p.Z;
         }
+
+        public override string ToString()
+        {
+            return X.ToString() +"-"+ Y.ToString() +"-"+Z.ToString();
+
+        }
+
+
     }
 }
