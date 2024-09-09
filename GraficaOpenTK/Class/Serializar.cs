@@ -45,5 +45,9 @@ namespace GraficaOpenTK.Class
             return objeto;
         }
 
+        public static double GradosARadianes(double grados)
+        {
+            return grados * (Math.PI / 180.0);
+        }
     }
 }

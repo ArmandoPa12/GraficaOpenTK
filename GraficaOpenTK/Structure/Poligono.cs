@@ -10,6 +10,7 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Diagnostics.CodeAnalysis;
 using GraficaOpenTK.Interfaces;
+using GraficaOpenTK.Class;
 
 namespace GraficaOpenTK.Structure
 {
@@ -46,6 +47,8 @@ namespace GraficaOpenTK.Structure
         public Poligono add(Punto punto)
         {
             this.listaPuntos.Add(punto);
+            this.centro = CalcularCentroDeMasa();
+
             return this; 
         }
         public void remove(Punto punto)
@@ -64,14 +67,29 @@ namespace GraficaOpenTK.Structure
             GL.Begin(this.primitiveType);
             foreach (var item in listaPuntos)
             {   
-                GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
+                //GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
+                GL.Vertex3(item.X, item.Y , item.Z);
             }
             GL.End();
             GL.Flush();
         }
         public void setCentro(Punto newCentro)
         {
-            centro = newCentro;
+            Punto currentCentro = this.CalcularCentroDeMasa();
+            Console.WriteLine(currentCentro.ToString());
+            Console.WriteLine(newCentro.ToString());
+
+            Punto desplazamiento = newCentro - currentCentro;
+            for (int i = 0; i < listaPuntos.Count; i++)
+            {
+                //listaPuntos[i] = listaPuntos[i] + desplazamiento;
+                listaPuntos[i] = new Punto(
+                    Math.Round(listaPuntos[i].X + desplazamiento.X, 10),
+                    Math.Round(listaPuntos[i].Y + desplazamiento.Y, 10),
+                    Math.Round(listaPuntos[i].Z + desplazamiento.Z, 10)
+                );
+            }
+            this.centro = currentCentro;
         }
         public Punto getCentro()
         {
@@ -98,6 +116,10 @@ namespace GraficaOpenTK.Structure
             double centroY = (minY + maxY) / 2;
             double centroZ = (minZ+ maxZ) / 2;
 
+            centroX = Math.Round(centroX, 10);
+            centroY = Math.Round(centroY, 10);
+            centroZ = Math.Round(centroZ, 10);
+
             return new Punto(centroX, centroY, centroZ);
         }
         public Poligono setTipo(PrimitiveType tipo)
@@ -110,7 +132,79 @@ namespace GraficaOpenTK.Structure
             this.color = color; 
             return this;
         }
+
+        public void trasladar(Punto desplazamiento)
+        {
+            // Recorre cada punto del polígono y aplica la traslación
+            for (int i = 0; i < listaPuntos.Count; i++)
+            {
+                // Actualiza cada punto sumando el desplazamiento
+                listaPuntos[i] = listaPuntos[i] + desplazamiento;
+            }
+
+            // También actualiza el centro del polígono
+            this.centro = this.centro + desplazamiento;
+        }
+
+        public void escalar(Punto factor)
+        {
+            // Calcula el centro actual del polígono
+            Punto centroActual = this.CalcularCentroDeMasa();
+
+            // Recorre cada punto del polígono y aplica el escalado respecto al centro
+            for (int i = 0; i < listaPuntos.Count; i++)
+            {
+                Punto p = listaPuntos[i];
+
+                // Calcular la distancia desde el punto al centro
+                double deltaX = p.X - centroActual.X;
+                double deltaY = p.Y - centroActual.Y;
+                double deltaZ = p.Z - centroActual.Z;
+
+                // Escalar esa distancia
+                deltaX *= factor.X;
+                deltaY *= factor.Y;
+                deltaZ *= factor.Z;
+
+                // Actualizar la posición del punto escalado
+                listaPuntos[i] = new Punto(centroActual.X + deltaX, centroActual.Y + deltaY, centroActual.Z + deltaZ);
+            }
+        }
         
+        public void rotar(double anguloX, double anguloY, double anguloZ)
+        {
+            // Convertir los ángulos a radianes
+            double radX = Serializar.GradosARadianes(anguloX);
+            double radY = Serializar.GradosARadianes(anguloY);
+            double radZ = Serializar.GradosARadianes(anguloZ);
+
+            // Crear matrices de rotación para cada eje
+            Matrix4 rotX = Matrix4.CreateRotationX((float)radX);
+            Matrix4 rotY = Matrix4.CreateRotationY((float)radY);
+            Matrix4 rotZ = Matrix4.CreateRotationZ((float)radZ);
+
+            // Combinar las matrices de rotación (aplicar en orden Z -> Y -> X)
+            Matrix4 matrizRotacion = rotZ * rotY * rotX;
+
+            // Calcular el centro actual del polígono
+            Punto centroActual = this.CalcularCentroDeMasa();
+
+            // Recorre cada punto del polígono y aplica la rotación
+            for (int i = 0; i < listaPuntos.Count; i++)
+            {
+                Punto p = listaPuntos[i];
+
+                // Trasladar el punto al origen (relativo al centro del polígono)
+                Punto puntoRelativo = p - centroActual;
+
+                // Aplicar la rotación usando la sobrecarga del operador *
+                Punto puntoRotado = matrizRotacion * puntoRelativo;
+
+                // Trasladar el punto de vuelta a su posición relativa al centro
+                listaPuntos[i] = puntoRotado + centroActual;
+            }
+        }
+
 
         public void seeCenter()
         {

@@ -27,6 +27,17 @@ namespace GraficaOpenTK
         private double move = 0.01;
         private double ejex;
 
+        private Poligono aFront;
+        private Poligono aBack;
+        private Poligono aLeft;
+        private Poligono aRigth;
+        private Poligono aUp;
+        private Poligono aDown;
+
+        private Parte arriba;
+        private Parte abajo;
+
+        private Objeto letraT;
 
 
         private Escenario escenario1;
@@ -40,6 +51,18 @@ namespace GraficaOpenTK
             //inicializaraCubo();
             //inicializarT();
 
+
+            //aFront = new Poligono();
+            //aBack = new Poligono();
+            //aLeft = new Poligono();
+            //aRigth = new Poligono();
+            //aUp = new Poligono();
+            //aDown = new Poligono();
+
+            arriba = new Parte();
+            abajo = new Parte();
+
+            letraT = new Objeto();
         }
 
 
@@ -49,25 +72,54 @@ namespace GraficaOpenTK
             GL.ClearColor(Color4.White);
             GL.Enable(EnableCap.DepthTest);
 
-            
+            //Punto a = new Punto(-0.3, 0.4, 0.0);
+            //Punto b = new Punto(-0.3, 0.2, 0.0);
+            //Punto c = new Punto(0.3, 0.2, 0.0);
+            //Punto d = new Punto(0.3, 0.4, 0.0);
+
+
+            //Punto a1 = new Punto(-0.3, 0.4, 0.2);
+            //Punto b1 = new Punto(-0.3, 0.2, 0.2);
+            //Punto c1 = new Punto(0.3, 0.2, 0.2);
+            //Punto d1 = new Punto(0.3, 0.4, 0.2);
+
+            //aFront = new Poligono();
+
+            //PrimitiveType tipo = PrimitiveType.LineLoop;
+
+            //aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(Color.Fuchsia);
+            //aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(Color.Red);
+            //aLeft.add(a).add(a1).add(b1).add(b).setTipo(tipo).setColor(Color.Black);
+            //aRigth.add(d).add(d1).add(c1).add(c).setTipo(tipo).setColor(Color.Green);
+            //aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
+            //aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
+
+
+
+            //arriba.add("arriba", aUp)
+            //    .add("abajo", aDown)
+            //    .add("frente", aFront)
+            //    .add("atras", aBack)
+            //    .add("izquierda", aLeft)
+            //    .add("derecha", aRigth);
+
+            //abajo.add("arriba", aUp)
+            //    .add("abajo", aDown)
+            //    .add("frente", aFront)
+            //    .add("atras", aBack)
+            //    .add("izquierda", aLeft)
+            //    .add("derecha", aRigth);
+
+
             //escenario1.add("letraT", letraT);
-        }
+            //arriba.setCentro(new Punto(0.0,0,0));
 
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            base.OnRenderFrame(e);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            //arriba.Trasladar(new Punto(-0.3,0.1,0.0));
+            //arriba.Escalar(1.1, 1.1, 1.1);
+            //arriba.Escalar(2,2,2);
 
-            GL.LoadIdentity();
-            GL.Translate(camara.TlsX, camara.TlsY, -0.2);
-            GL.Rotate(camara.AngX, new Vector3d(1.0, 0.0, 0.0));
-            GL.Rotate(camara.AngY, new Vector3d(0.0, 1.0, 0.0));
-            GL.Rotate(camara.AngZ, new Vector3d(0.0, 0.0, 1.0));
-            double scala = camara.Scale;
-            GL.Scale(scala, scala, scala);
 
-            Poligono.cartesiano();
 
             // arriba
             Punto a = new Punto(-0.3, 0.4, 0.0);
@@ -96,19 +148,138 @@ namespace GraficaOpenTK
             aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
             aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
 
-            aFront.draw();
-            aBack.draw();
-            aLeft.draw();
-            aRigth.draw();
-            aUp.draw();
-            aDown.draw();
+            //aFront.draw();
+            //aBack.draw();
+            //aLeft.draw();
+            //aRigth.draw();
+            //aUp.draw(); 
+            //aDown.draw();
 
-            Console.WriteLine(aFront.getCentro().ToString() + "f");
-            Console.WriteLine(aBack.getCentro().ToString() + "b");
-            Console.WriteLine(aLeft.getCentro().ToString() + "l");
-            Console.WriteLine(aRigth.getCentro().ToString() + "r");
-            Console.WriteLine(aUp.getCentro().ToString() + "u");
-            Console.WriteLine(aDown.getCentro().ToString() + "d");
+            // abajo
+            Punto f = new Punto(-0.1, 0.2, 0.0);
+            Punto g = new Punto(-0.1, -0.3, 0.0);
+            Punto h = new Punto(0.1, -0.3, 0.0);
+            Punto i = new Punto(0.1, 0.2, 0.0);
+
+            Punto f1 = new Punto(-0.1, 0.2, 0.2);
+            Punto g1 = new Punto(-0.1, -0.3, 0.2);
+            Punto h1 = new Punto(0.1, -0.3, 0.2);
+            Punto i1 = new Punto(0.1, 0.2, 0.2);
+
+            Poligono bFront = new Poligono();
+            Poligono bBack = new Poligono();
+            Poligono bLeft = new Poligono();
+            Poligono bRigth = new Poligono();
+            Poligono bUp = new Poligono();
+            Poligono bDown = new Poligono();
+
+            bFront.add(f).add(g).add(h).add(i).setTipo(tipo).setColor(Color.Fuchsia);
+            bBack.add(f1).add(g1).add(h1).add(i1).setTipo(tipo).setColor(Color.Red);
+            bLeft.add(f).add(f1).add(g1).add(g).setTipo(tipo).setColor(Color.Black);
+            bRigth.add(i).add(i1).add(h1).add(h).setTipo(tipo).setColor(Color.Green);
+            bUp.add(f).add(i).add(i1).add(f1).setTipo(tipo).setColor(Color.Gray);
+            bDown.add(g).add(h).add(h1).add(g1).setTipo(tipo).setColor(Color.Yellow);
+
+            //bFront.draw();
+            //bBack.draw();
+            //bLeft.draw();
+            //bRigth.draw();
+            //bUp.draw();
+            //bDown.draw();
+
+            //Parte arriba = new Parte();
+            arriba.add("arriba", aUp)
+                .add("abajo", aDown)
+                .add("frente", aFront)
+                .add("atras", aBack)
+                .add("izquierda", aLeft)
+                .add("derecha", aRigth);
+
+
+            //Parte abajo = new Parte();
+            abajo.add("arriba", bUp)
+                .add("abajo", bDown)
+                .add("frente", bFront)
+                .add("atras", bBack)
+                .add("izquierda", bLeft)
+                .add("derecha", bRigth);
+
+            letraT.add("abajo", abajo);
+            letraT.add("arriba", arriba);
+
+            //letraT.trasladar(new Punto(0.001, 0, 0.0));
+            letraT.TrasladarParte("arriba", new Punto(0.1, 0.4, 0.0));
+            //Objeto letraT = new Objeto();
+            //letraT.add("arriba", arriba).add("abajo", abajo);
+        }
+
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            base.OnRenderFrame(e);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.LoadIdentity();
+            GL.Translate(camara.TlsX, camara.TlsY, -0.2);
+            GL.Rotate(camara.AngX, new Vector3d(1.0, 0.0, 0.0));
+            GL.Rotate(camara.AngY, new Vector3d(0.0, 1.0, 0.0));
+            GL.Rotate(camara.AngZ, new Vector3d(0.0, 0.0, 1.0));
+            double scala = camara.Scale;
+            GL.Scale(scala, scala, scala);
+
+            Poligono.cartesiano();
+
+
+            letraT.draw();
+            Console.WriteLine(letraT.getCentro().ToString());
+
+            //Console.WriteLine(arriba.getCentro().ToString());
+
+            //// arriba
+            //Punto a = new Punto(-0.3, 0.4, 0.0);
+            //Punto b = new Punto(-0.3, 0.2, 0.0);
+            //Punto c = new Punto(0.3, 0.2, 0.0);
+            //Punto d = new Punto(0.3, 0.4, 0.0);
+
+            ////Punto a1 = new Punto(-0.3, 0.4, 0.2);
+            ////Punto b1 = new Punto(-0.3, 0.2, 0.2);
+            ////Punto c1 = new Punto(0.3, 0.2, 0.2);
+            ////Punto d1 = new Punto(0.3, 0.4, 0.2);
+
+            //Poligono aFront = new Poligono();
+            ////Poligono aBack = new Poligono();
+            ////Poligono aLeft = new Poligono();
+            ////Poligono aRigth = new Poligono();
+            ////Poligono aUp = new Poligono();
+            ////Poligono aDown = new Poligono();
+
+            //PrimitiveType tipo = PrimitiveType.Quads;
+
+            //aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(Color.Fuchsia);
+            ////aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(Color.Red);
+            ////aLeft.add(a).add(a1).add(b1).add(b).setTipo(tipo).setColor(Color.Black);
+            ////aRigth.add(d).add(d1).add(c1).add(c).setTipo(tipo).setColor(Color.Green);
+            ////aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
+            ////aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
+
+            ////aFront.setCentro(new Punto(0.2,0.3,0.0));
+            ////aFront.setCentro(new Punto());
+
+            //aFront.draw();
+            ////aBack.draw();
+            ////aLeft.draw();
+            ////aRigth.draw();
+            ////aUp.draw();
+            ////aDown.draw();
+
+            //aFront.Trasladar(new Punto(0.001, 0.000, 0.0));
+
+            //Console.WriteLine(aFront.getCentro().ToString() + "f");
+            //Console.WriteLine(aBack.getCentro().ToString() + "b");
+            //Console.WriteLine(aLeft.getCentro().ToString() + "l");
+            //Console.WriteLine(aRigth.getCentro().ToString() + "r");
+            //Console.WriteLine(aUp.getCentro().ToString() + "u");
+            //Console.WriteLine(aDown.getCentro().ToString() + "d");
 
 
 
@@ -131,9 +302,6 @@ namespace GraficaOpenTK
 
             //arriba.draw();
             //Console.WriteLine(arriba.getCentro());
-
-
-
 
 
 

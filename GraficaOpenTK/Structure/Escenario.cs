@@ -51,5 +51,20 @@ namespace GraficaOpenTK.Structure
         {
             throw new NotImplementedException();
         }
+
+        public void escalar(Punto factor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void trasladar(Punto desplazamiento)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void rotar(double aX, double aY, double aZ)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
