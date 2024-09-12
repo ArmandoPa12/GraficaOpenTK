@@ -206,17 +206,25 @@ namespace GraficaOpenTK
             Objeto cubo3D = new Objeto();
             cubo3D.add("cubo",cubo);
 
-            letraT.trasladar(new Punto(-0.3, 0, -0.2));
-            cubo3D.trasladar(new Punto(0.1, 0, 0.3));
+            letraT.trasladar(new Punto(-0.3, 0, -0.1));
+            cubo3D.trasladar(new Punto(0.1, 0, 0.1));
+
 
 
 
             escenario1.add("letra", letraT);
             escenario1.add("cubo3D", cubo3D);
             escenario1.verObjeto();
-            //escenario1.verParte("letra");
+            escenario1.verParte("letra");
 
-            //escenario1.escalar(1.6);
+            //escenario1.escalar(0.7,"letra", "arriba");
+
+
+
+            //escenario1.trasladarObjeto("letra", new Punto(-0.4,0.4,0));
+            //escenario1.trasladar(new Punto(0.2,0,0),"letra","arriba");
+            escenario1.rotar(new Punto(45, 0, 0),"letra","abajo");
+            
 
         }
 
@@ -259,9 +267,7 @@ namespace GraficaOpenTK
 
 
             escenario1.draw();
-            Punto s = new Punto(1, 0, 0);
-            escenario1.rotar(s);
-            //escenario1.rotarObjeto("letra", s);
+            
             //Punto s = new Punto(0.001, 0.001, 0.001);
             //escenario1.trasladar(s);
             //escenario1.rotar(s);

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,45 +64,107 @@ namespace GraficaOpenTK.Structure
 
         #region transformaciones
 
-        public void rotar(Punto angulo)
+        public void rotar(Punto angulo, string claveObj = null, string clavePart = null)
         {
-            //Punto centroObjeto = this.CalcularCentroDeMasa();
-            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+            if (claveObj == null && clavePart == null)
             {
-                kvp.Value.setCentro(centro);
-                kvp.Value.rotar(angulo);
+                foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+                {
+                    kvp.Value.setCentro(centro);
+                    kvp.Value.rotar(angulo);
+                }
             }
-        }
-
-        //public void rotarObjeto(string clave, Punto angulo)
-        //{
+            else if (claveObj != null && clavePart == null)
+            {
+                if (listaObjetos.ContainsKey(claveObj))
+                {
+                    Objeto objeto = listaObjetos[claveObj];
+                    objeto.setCentro(objeto.CalcularCentroDeMasa());
+                    objeto.rotar(angulo);
+                }
+            }
+            else if (claveObj != null && clavePart != null)
+            {
+                if (listaObjetos.ContainsKey(claveObj))
+                {
+                    Objeto objeto = listaObjetos[claveObj];
+                    if (objeto.listaPartes.ContainsKey(clavePart))
+                    {
+                        Parte parte = objeto.listaPartes[clavePart];
+                        parte.setCentro(parte.CalcularCentroDeMasa());
+                        parte.rotar(angulo);
+                    }
+                }
+            }
             
-        //    foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
-        //    {                
-        //        if (kvp.Key == clave)
-        //        {
-        //            kvp.Value.setCentro(kvp.Value.CalcularCentroDeMasa());
-        //            kvp.Value.rotar(angulo);       
-        //        }
-        //    }
-        //}
-
-        public void escalar(double factor)
-        {
-            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
-            {
-                kvp.Value.setCentro(centro);
-                kvp.Value.escalar(factor);
-            }
         }
 
-        public void trasladar(Punto valor)
+        public void escalar(double factor, string claveObj = null, string clavePart = null)
         {
-            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+            if (claveObj == null && clavePart == null)
             {
-                kvp.Value.trasladar(valor);
+                foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+                {
+                    kvp.Value.setCentro(centro);
+                    kvp.Value.escalar(factor);
+                }
+            }else if (claveObj != null && clavePart == null)
+            {
+                if (listaObjetos.ContainsKey(claveObj)){                    
+                    Objeto objeto = listaObjetos[claveObj];
+                    objeto.setCentro(objeto.CalcularCentroDeMasa());
+                    objeto.escalar(factor);
+                }
+            }else if (claveObj != null && clavePart != null)
+            {
+                if (listaObjetos.ContainsKey(claveObj))
+                {
+                    Objeto objeto = listaObjetos[claveObj];
+                    if (objeto.listaPartes.ContainsKey(clavePart))
+                    {
+                        Parte parte = objeto.listaPartes[clavePart];
+                        parte.setCentro(parte.CalcularCentroDeMasa());
+                        parte.escalar(factor);
+                    }
+                }
             }
+            
         }
+
+        public void trasladar(Punto valor, string claveObj = null, string clavePart = null)
+        {
+            if (claveObj == null && clavePart == null)
+            {
+                foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+                {
+                    kvp.Value.trasladar(valor);
+                }
+            }
+            else if (claveObj != null && clavePart == null)
+            {
+                if (listaObjetos.ContainsKey(claveObj))
+                {
+                    Objeto objeto = listaObjetos[claveObj];
+                    objeto.setCentro(objeto.CalcularCentroDeMasa());
+                    objeto.trasladar(valor);
+                }
+            }
+            else if (claveObj != null && clavePart != null)
+            {
+                if (listaObjetos.ContainsKey(claveObj))
+                {
+                    Objeto objeto = listaObjetos[claveObj];
+                    if (objeto.listaPartes.ContainsKey(clavePart))
+                    {
+                        Parte parte = objeto.listaPartes[clavePart];
+                        parte.setCentro(parte.CalcularCentroDeMasa());
+                        parte.trasladar(valor);
+                    }
+                }
+            }
+            
+        }
+        
         #endregion
 
 

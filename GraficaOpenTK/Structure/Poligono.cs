@@ -73,13 +73,11 @@ namespace GraficaOpenTK.Structure
         }
 
         public void rotar(Punto angulo)
-        {
-            
+        {            
             foreach (var item in listaPuntos)
             {
                 item.rotar(angulo.X, angulo.Y, angulo.Z,this.centro);
             }
- 
         }
         public void trasladar(Punto valor)
         {
