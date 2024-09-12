@@ -46,6 +46,7 @@ namespace GraficaOpenTK.Structure
         public Poligono add(Punto punto)
         {
             this.listaPuntos.Add(punto);
+            this.centro = CalcularCentroDeMasa();
             return this; 
         }
         public void remove(Punto punto)
@@ -63,11 +64,42 @@ namespace GraficaOpenTK.Structure
             GL.Color4(this.color);
             GL.Begin(this.primitiveType);
             foreach (var item in listaPuntos)
-            {   
-                GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
+            {
+                GL.Vertex3(item.X, item.Y, item.Z);
+                //GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
             }
             GL.End();
             GL.Flush();
+        }
+
+        public void rotar(Punto angulo)
+        {
+            
+            foreach (var item in listaPuntos)
+            {
+                item.rotar(angulo.X, angulo.Y, angulo.Z,this.centro);
+            }
+ 
+        }
+        public void trasladar(Punto valor)
+        {
+
+            foreach (var item in listaPuntos)
+            {
+                //item.rotar(angulo.X, angulo.Y, angulo.Z, this.centro);
+                item.trasladar(valor);
+
+            }
+
+        }
+        public void escalar(double factor)
+        {
+
+            foreach (var item in listaPuntos)
+            {                
+                item.escalar(factor, centro);    
+            }
+
         }
         public void setCentro(Punto newCentro)
         {
@@ -77,6 +109,7 @@ namespace GraficaOpenTK.Structure
         {
             return this.CalcularCentroDeMasa();
         }
+
 
         public Punto CalcularCentroDeMasa()
         {
@@ -112,31 +145,31 @@ namespace GraficaOpenTK.Structure
         }
         
 
-        public void seeCenter()
-        {
-            // Dibuja el eje X centrado en ini
-            GL.Begin(PrimitiveType.Lines);
-            GL.Color4(Color.Red);
-            GL.Vertex3(centro.X - 0.1f, centro.Y, centro.Z); // Extremo negativo del eje X
-            GL.Vertex3(centro.X + 0.1f, centro.Y, centro.Z); // Extremo positivo del eje X
-            GL.End();
+        //public void seeCenter()
+        //{
+        //    // Dibuja el eje X centrado en ini
+        //    GL.Begin(PrimitiveType.Lines);
+        //    GL.Color4(Color.Red);
+        //    GL.Vertex3(centro.X - 0.1f, centro.Y, centro.Z); // Extremo negativo del eje X
+        //    GL.Vertex3(centro.X + 0.1f, centro.Y, centro.Z); // Extremo positivo del eje X
+        //    GL.End();
 
-            // Dibuja el eje Y centrado en ini
-            GL.Begin(PrimitiveType.Lines);
-            GL.Color4(Color.Green);
-            GL.Vertex3(centro.X, centro.Y - 0.1f, centro.Z); // Extremo negativo del eje Y
-            GL.Vertex3(centro.X, centro.Y + 0.1f, centro.Z); // Extremo positivo del eje Y
-            GL.End();
+        //    // Dibuja el eje Y centrado en ini
+        //    GL.Begin(PrimitiveType.Lines);
+        //    GL.Color4(Color.Green);
+        //    GL.Vertex3(centro.X, centro.Y - 0.1f, centro.Z); // Extremo negativo del eje Y
+        //    GL.Vertex3(centro.X, centro.Y + 0.1f, centro.Z); // Extremo positivo del eje Y
+        //    GL.End();
 
-            // Dibuja el eje Z centrado en ini
-            GL.Begin(PrimitiveType.Lines);
-            GL.Color4(Color.Blue);
-            GL.Vertex3(centro.X, centro.Y, centro.Z - 0.1f); // Extremo negativo del eje Z
-            GL.Vertex3(centro.X, centro.Y, centro.Z + 0.1f); // Extremo positivo del eje Z
-            GL.End();
+        //    // Dibuja el eje Z centrado en ini
+        //    GL.Begin(PrimitiveType.Lines);
+        //    GL.Color4(Color.Blue);
+        //    GL.Vertex3(centro.X, centro.Y, centro.Z - 0.1f); // Extremo negativo del eje Z
+        //    GL.Vertex3(centro.X, centro.Y, centro.Z + 0.1f); // Extremo positivo del eje Z
+        //    GL.End();
 
-            GL.Flush();
-        }
+        //    GL.Flush();
+        //}
 
         public static void cartesiano(double escala = 0.1f)
         {

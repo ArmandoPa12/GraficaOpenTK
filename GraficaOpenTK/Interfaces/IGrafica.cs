@@ -13,6 +13,13 @@ namespace GraficaOpenTK.Interfaces
         public void draw();
         public void setCentro(Punto centro);
 
+        public void rotar(Punto angulo);
+
+        public void escalar(double factor);
+
+        public void trasladar(Punto valor);
+
+
         //public T add();
     }
 }

@@ -24,6 +24,7 @@ namespace GraficaOpenTK.Structure
             centro = new Punto();
             listaObjetos = objetos;
         }
+        #region acciones basicas
         public Escenario add(string key, Objeto objeto)
         {
             this.listaObjetos.Add(key, objeto);
@@ -37,19 +38,131 @@ namespace GraficaOpenTK.Structure
         {
             return listaObjetos[key];
         }
-        //remove
-        //get
+
+        #endregion
+
         public void draw()
         {
+            //Punto centroObjeto = this.CalcularCentroDeMasa();
+
             foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
             {
+                kvp.Value.setCentro(this.centro);
                 kvp.Value.draw();
             }
         }
 
         public void setCentro(Punto centro)
         {
-            throw new NotImplementedException();
+            this.centro = centro;
         }
+        public Punto getCentro()
+        { 
+            return centro; 
+        }
+
+        #region transformaciones
+
+        public void rotar(Punto angulo)
+        {
+            //Punto centroObjeto = this.CalcularCentroDeMasa();
+            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+            {
+                kvp.Value.setCentro(centro);
+                kvp.Value.rotar(angulo);
+            }
+        }
+
+        //public void rotarObjeto(string clave, Punto angulo)
+        //{
+            
+        //    foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+        //    {                
+        //        if (kvp.Key == clave)
+        //        {
+        //            kvp.Value.setCentro(kvp.Value.CalcularCentroDeMasa());
+        //            kvp.Value.rotar(angulo);       
+        //        }
+        //    }
+        //}
+
+        public void escalar(double factor)
+        {
+            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+            {
+                kvp.Value.setCentro(centro);
+                kvp.Value.escalar(factor);
+            }
+        }
+
+        public void trasladar(Punto valor)
+        {
+            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+            {
+                kvp.Value.trasladar(valor);
+            }
+        }
+        #endregion
+
+
+
+        public Punto CalcularCentroDeMasa()
+        {
+            if (listaObjetos.Count == 0)
+                return new Punto(0, 0, 0);  // Si no hay objetos en el escenario, el centro es el origen.
+
+            // Variables para sumar las coordenadas de los centros de masa de los objetos.
+            double sumaX = 0;
+            double sumaY = 0;
+            double sumaZ = 0;
+
+            // Iterar sobre todos los objetos en el escenario.
+            foreach (var kvp in listaObjetos)
+            {
+                // Calcula el centro de masa de cada objeto.
+                Punto centroObjeto = kvp.Value.CalcularCentroDeMasa();
+
+                // Sumar las coordenadas de los centros de masa.
+                sumaX += centroObjeto.X;
+                sumaY += centroObjeto.Y;
+                sumaZ += centroObjeto.Z;
+            }
+
+            // Promediar las coordenadas de los centros de masa de todos los objetos.
+            int numObjetos = listaObjetos.Count;
+            double promedioX = sumaX / numObjetos;
+            double promedioY = sumaY / numObjetos;
+            double promedioZ = sumaZ / numObjetos;
+
+            // Retornar el centro de masa del Escenario.
+            return new Punto(promedioX, promedioY, promedioZ);
+        }
+
+
+
+
+
+
+        public void verObjeto()
+        {
+            string a ="";
+            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+            {
+                a += kvp.Key + "\n";
+            }
+            Console.WriteLine(a);
+        }
+        public void verParte(string nombreObjeto)
+        {
+            string a = "";
+            foreach (KeyValuePair<string, Objeto> kvp in listaObjetos)
+            {
+                //a += kvp.Key + "\n";
+                if (kvp.Key == nombreObjeto)
+                { a = Objeto.verPartes(kvp.Value); }
+            }
+            Console.WriteLine(a);
+        }
+
     }
 }

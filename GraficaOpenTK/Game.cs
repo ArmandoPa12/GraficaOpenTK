@@ -27,6 +27,12 @@ namespace GraficaOpenTK
         private double move = 0.01;
         private double ejex;
 
+        //private Poligono aFront;
+
+        //private Parte arriba;
+
+        //private Objeto letraT;
+
 
 
         private Escenario escenario1;
@@ -39,7 +45,8 @@ namespace GraficaOpenTK
             // iniciar objetos
             //inicializaraCubo();
             //inicializarT();
-
+            //aFront = new Poligono();
+            //arriba = new Parte();
         }
 
 
@@ -48,26 +55,6 @@ namespace GraficaOpenTK
             base.OnLoad(e); 
             GL.ClearColor(Color4.White);
             GL.Enable(EnableCap.DepthTest);
-
-            
-            //escenario1.add("letraT", letraT);
-        }
-
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            base.OnRenderFrame(e);
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            GL.LoadIdentity();
-            GL.Translate(camara.TlsX, camara.TlsY, -0.2);
-            GL.Rotate(camara.AngX, new Vector3d(1.0, 0.0, 0.0));
-            GL.Rotate(camara.AngY, new Vector3d(0.0, 1.0, 0.0));
-            GL.Rotate(camara.AngZ, new Vector3d(0.0, 0.0, 1.0));
-            double scala = camara.Scale;
-            GL.Scale(scala, scala, scala);
-
-            Poligono.cartesiano();
 
             // arriba
             Punto a = new Punto(-0.3, 0.4, 0.0);
@@ -87,7 +74,7 @@ namespace GraficaOpenTK
             Poligono aUp = new Poligono();
             Poligono aDown = new Poligono();
 
-            PrimitiveType tipo = PrimitiveType.Quads;
+            PrimitiveType tipo = PrimitiveType.LineLoop;
 
             aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(Color.Fuchsia);
             aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(Color.Red);
@@ -96,48 +83,189 @@ namespace GraficaOpenTK
             aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
             aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
 
-            aFront.draw();
-            aBack.draw();
-            aLeft.draw();
-            aRigth.draw();
-            aUp.draw();
-            aDown.draw();
+            //aFront.escalar(2.4);
 
-            Console.WriteLine(aFront.getCentro().ToString() + "f");
-            Console.WriteLine(aBack.getCentro().ToString() + "b");
-            Console.WriteLine(aLeft.getCentro().ToString() + "l");
-            Console.WriteLine(aRigth.getCentro().ToString() + "r");
-            Console.WriteLine(aUp.getCentro().ToString() + "u");
-            Console.WriteLine(aDown.getCentro().ToString() + "d");
+            Parte arriba = new Parte();
 
+            arriba.add("arriba", aUp)
+                .add("abajo", aDown)
+                .add("frente", aFront)
+                .add("atras", aBack)
+                .add("izquierda", aLeft)
+                .add("derecha", aRigth);
+
+            //arriba.escalar(0.3);
 
 
+            //escenario1.add("letraT", letraT);
 
-            //aBack.draw();
-            //aLeft.draw();
-            //aRigth.draw();
-            //aUp.draw(); 
-            //aDown.draw();
+            // ---------------------------------------------------------------
 
-            //Parte arriba = new Parte();
-            //arriba.add("arriba", aUp)
-            //    .add("abajo", aDown)
-            //    .add("frente", aFront)
-            //    .add("atras", aBack)
-            //    .add("izquierda", aLeft)
-            //    .add("derecha", aRigth);
+            //abajo
 
-            //arriba.setCentro(new Punto(0.2,0.3,0.0));
+            Punto f = new Punto(-0.1, 0.2, 0.0);
+            Punto g = new Punto(-0.1, -0.3, 0.0);
+            Punto h = new Punto(0.1, -0.3, 0.0);
+            Punto i = new Punto(0.1, 0.2, 0.0);
+
+            Punto f1 = new Punto(-0.1, 0.2, 0.2);
+            Punto g1 = new Punto(-0.1, -0.3, 0.2);
+            Punto h1 = new Punto(0.1, -0.3, 0.2);
+            Punto i1 = new Punto(0.1, 0.2, 0.2);
+
+            Poligono bFront = new Poligono();
+            Poligono bBack = new Poligono();
+            Poligono bLeft = new Poligono();
+            Poligono bRigth = new Poligono();
+            Poligono bUp = new Poligono();
+            Poligono bDown = new Poligono();
+
+            bFront.add(f).add(g).add(h).add(i).setTipo(tipo).setColor(Color.Fuchsia);
+            bBack.add(f1).add(g1).add(h1).add(i1).setTipo(tipo).setColor(Color.Red);
+            bLeft.add(f).add(f1).add(g1).add(g).setTipo(tipo).setColor(Color.Black);
+            bRigth.add(i).add(i1).add(h1).add(h).setTipo(tipo).setColor(Color.Green);
+            bUp.add(f).add(i).add(i1).add(f1).setTipo(tipo).setColor(Color.Gray);
+            bDown.add(g).add(h).add(h1).add(g1).setTipo(tipo).setColor(Color.Yellow);
+
+
+            Parte abajo = new Parte();
+            abajo.add("arriba", bUp)
+                .add("abajo", bDown)
+                .add("frente", bFront)
+                .add("atras", bBack)
+                .add("izquierda", bLeft)
+                .add("derecha", bRigth);
+
+            Objeto letraT = new Objeto();
+
+            letraT.add("arriba", arriba).add("abajo", abajo);
+            //letraT.trasladar(new Punto(-0.1,0,0));
+            //letraT.escalar(1.3);
+
+
+
+            // ----------------------------------------
+
+            Punto a2 = new Punto(-0.2, 0.2, 0.0);
+            Punto b2 = new Punto(-0.2, -0.2, 0.0);
+            Punto c2 = new Punto(0.2, -0.2, 0.0);
+            Punto d2 = new Punto(0.2, 0.2, 0.0);
+
+            Punto a21 = new Punto(-0.2, 0.2, 0.2);
+            Punto b21 = new Punto(-0.2, -0.2, 0.2);
+            Punto c21 = new Punto(0.2, -0.2, 0.2);
+            Punto d21 = new Punto(0.2, 0.2, 0.2);
+
+            // va2c2ios 
+            Poligono front = new Poligono();
+            Poligono back = new Poligono();
+            Poligono left = new Poligono();
+            Poligono right = new Poligono();
+            Poligono up = new Poligono();
+            Poligono down = new Poligono();
+
+
+            front.add(a2);
+            front.add(b2);
+            front.add(c2);
+            front.add(d2);
+
+            back.add(a21);
+            back.add(b21);
+            back.add(c21);
+            back.add(d21);
+
+            left.add(a2);
+            left.add(a21);
+            left.add(b21);
+            left.add(b2);
+
+            right.add(d2);
+            right.add(d21);
+            right.add(c21);
+            right.add(c2);
+
+            up.add(a2);
+            up.add(a21);
+            up.add(d21);
+            up.add(d2);
+
+            down.add(b2);
+            down.add(b21);
+            down.add(c21);
+            down.add(c2);
+
+            Parte cubo = new Parte();
+            cubo.add("a", front)
+                .add("b", back)
+                .add("c", left)
+                .add("d", right)
+                .add("e", up)
+                .add("f", down);
+
+            Objeto cubo3D = new Objeto();
+            cubo3D.add("cubo",cubo);
+
+            letraT.trasladar(new Punto(-0.3, 0, -0.2));
+            cubo3D.trasladar(new Punto(0.1, 0, 0.3));
+
+
+
+            escenario1.add("letra", letraT);
+            escenario1.add("cubo3D", cubo3D);
+            escenario1.verObjeto();
+            //escenario1.verParte("letra");
+
+            //escenario1.escalar(1.6);
+
+        }
+
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            base.OnRenderFrame(e);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.LoadIdentity();
+            GL.Translate(camara.TlsX, camara.TlsY, -0.2);
+            GL.Rotate(camara.AngX, new Vector3d(1.0, 0.0, 0.0));
+            GL.Rotate(camara.AngY, new Vector3d(0.0, 1.0, 0.0));
+            GL.Rotate(camara.AngZ, new Vector3d(0.0, 0.0, 1.0));
+            double scala = camara.Scale;
+            GL.Scale(scala, scala, scala);
+
+            Poligono.cartesiano();
+
+
+
 
             //arriba.draw();
-            //Console.WriteLine(arriba.getCentro());
+            //arriba.rotar(new Punto(0, 0, 1));
 
 
+            //aFront.draw();
+            //aFront.trasladar(new Punto(0.001,0.001,0.001));
 
 
+            //arriba.draw();
+            //arriba.rotar(new Punto(0, 1, 0));
+
+
+            //arriba.draw();
+            //arriba.trasladar(new Punto(0.001, 0.001, 0.001));
+
+            //letraT.draw();
+            //letraT.rotar(new Punto(0, 1, 0));
 
 
             escenario1.draw();
+            Punto s = new Punto(1, 0, 0);
+            escenario1.rotar(s);
+            //escenario1.rotarObjeto("letra", s);
+            //Punto s = new Punto(0.001, 0.001, 0.001);
+            //escenario1.trasladar(s);
+            //escenario1.rotar(s);
+            //Console.WriteLine(escenario1.getCentro().ToString());
 
             GL.Flush();
 
