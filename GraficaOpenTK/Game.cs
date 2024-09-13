@@ -27,6 +27,8 @@ namespace GraficaOpenTK
         private double move = 0.01;
         private double ejex;
 
+        private Thread consoleThread;
+        private bool running = true;
         //private Poligono aFront;
 
         //private Parte arriba;
@@ -55,6 +57,11 @@ namespace GraficaOpenTK
             base.OnLoad(e); 
             GL.ClearColor(Color4.White);
             GL.Enable(EnableCap.DepthTest);
+
+            // Iniciar el hilo de la consola
+            //consoleThread = new Thread(new ThreadStart(ControlarConsola));
+            //consoleThread.IsBackground = true;
+            //consoleThread.Start();
 
             // arriba
             Punto a = new Punto(-0.3, 0.4, 0.0);
@@ -267,7 +274,7 @@ namespace GraficaOpenTK
 
 
             escenario1.draw();
-            
+                 
             //Punto s = new Punto(0.001, 0.001, 0.001);
             //escenario1.trasladar(s);
             //escenario1.rotar(s);
@@ -282,6 +289,15 @@ namespace GraficaOpenTK
         {
             base.OnResize(e);
             GL.Viewport(0, 0, Width, Height);
+        }
+        protected override void OnUnload(EventArgs e)
+        {
+            base.OnUnload(e);
+            running = false;  // Detener el hilo de la consola al salir
+            if (consoleThread != null && consoleThread.IsAlive)
+            {
+                consoleThread.Join();  // Esperar a que el hilo termine
+            }
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -306,6 +322,137 @@ namespace GraficaOpenTK
         {
             camara.MouseWheel(e);
         }
+
+        public void ControlarConsola()
+        {
+            while (true)
+            {
+                Console.WriteLine("Introduce un comando (formato: accion escenario/objeto/parte [valores])");
+                string input = Console.ReadLine();
+                if (string.IsNullOrEmpty(input)) continue;
+
+                string[] tokens = input.Split(' ');
+
+                if (tokens.Length < 2)
+                {
+                    Console.WriteLine("Formato inválido, usa: accion escenario/objeto/parte [valores]");
+                    continue;
+                }
+
+                string accion = tokens[0].ToLower();
+                string nombreObjeto = tokens[1].ToLower();
+
+                switch (accion)
+                {
+                    case "rotar" or "r":
+                        ProcesarRotar(tokens);
+                        break;
+                    case "escalar" or "e":
+                        ProcesarEscalar(tokens);
+                        break;
+                    case "trasladar" or "t":
+                        ProcesarTrasladar(tokens);
+                        break;
+                    default:
+                        Console.WriteLine($"Acción no reconocida: {accion}");
+                        break;
+                }
+            }
+        }
+
+        private void ProcesarRotar(string[] tokens)
+        {
+            if (tokens.Length < 5)
+            {
+                Console.WriteLine("Formato inválido para rotar, usa: rotar escenario/objeto/parte anguloX anguloY anguloZ [parte]");
+                return;
+            }
+
+            double anguloX = double.Parse(tokens[2]);
+            double anguloY = double.Parse(tokens[3]);
+            double anguloZ = double.Parse(tokens[4]);
+            Punto angulo = new Punto(anguloX, anguloY, anguloZ);
+
+            if (tokens[1].ToLower() == "escenario")
+            {
+                escenario1.rotar(angulo);  // Rotar todo el escenario
+            }
+            else
+            {
+                string nombreObjeto = tokens[1];
+                if (tokens.Length == 5)
+                {
+                    escenario1.rotar(angulo, nombreObjeto);  // Rotar objeto
+                }
+                else if (tokens.Length == 6)
+                {
+                    string nombreParte = tokens[5];
+                    escenario1.rotar(angulo, nombreObjeto, nombreParte);  // Rotar parte específica
+                }
+            }
+        }
+
+        private void ProcesarEscalar(string[] tokens)
+        {
+            if (tokens.Length < 3)
+            {
+                Console.WriteLine("Formato inválido para escalar, usa: escalar escenario/objeto/parte factor [parte]");
+                return;
+            }
+
+            double factor = double.Parse(tokens[2]);
+
+            if (tokens[1].ToLower() == "escenario")
+            {
+                escenario1.escalar(factor);  // Escalar todo el escenario
+            }
+            else
+            {
+                string nombreObjeto = tokens[1];
+                if (tokens.Length == 3)
+                {
+                    escenario1.escalar(factor, nombreObjeto);  // Escalar objeto
+                }
+                else if (tokens.Length == 4)
+                {
+                    string nombreParte = tokens[3];
+                    escenario1.escalar(factor, nombreObjeto, nombreParte);  // Escalar parte específica
+                }
+            }
+        }
+
+        private void ProcesarTrasladar(string[] tokens)
+        {
+            if (tokens.Length < 5)
+            {
+                Console.WriteLine("Formato inválido para trasladar, usa: trasladar escenario/objeto/parte valorX valorY valorZ [parte]");
+                return;
+            }
+
+            double valorX = double.Parse(tokens[2]);
+            double valorY = double.Parse(tokens[3]);
+            double valorZ = double.Parse(tokens[4]);
+            Punto valor = new Punto(valorX, valorY, valorZ);
+
+            if (tokens[1].ToLower() == "escenario")
+            {
+                escenario1.trasladar(valor);  // Trasladar todo el escenario
+            }
+            else
+            {
+                string nombreObjeto = tokens[1];
+                if (tokens.Length == 5)
+                {
+                    escenario1.trasladar(valor, nombreObjeto);  // Trasladar objeto
+                }
+                else if (tokens.Length == 6)
+                {
+                    string nombreParte = tokens[5];
+                    escenario1.trasladar(valor, nombreObjeto, nombreParte);  // Trasladar parte específica
+                }
+            }
+        }
+
 
 
         public void inicializaraCubo()
