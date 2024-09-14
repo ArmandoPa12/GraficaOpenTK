@@ -167,8 +167,6 @@ namespace GraficaOpenTK.Structure
         
         #endregion
 
-
-
         public Punto CalcularCentroDeMasa()
         {
             if (listaObjetos.Count == 0)

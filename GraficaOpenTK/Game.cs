@@ -11,12 +11,15 @@ using System.Drawing;
 using GraficaOpenTK.Structure;
 using System.Text.Json;
 using GraficaOpenTK.Class;
+using GraficaOpenTK.Interfaces;
 
 
 namespace GraficaOpenTK
 {
     public class Game:GameWindow
     {
+        //GLControl
+
         private float angulox;
         private float anguloy;
         private float Rotar = 1.0f;
@@ -27,10 +30,11 @@ namespace GraficaOpenTK
         private double move = 0.01;
         private double ejex;
 
-        private Thread consoleThread;
-        private bool running = true;
-        //private Poligono aFront;
-
+        //private Thread consoleThread;
+        //private bool running = true;
+        private Poligono aFront;
+        private Objeto cubo;
+        private Objeto letraT;
         //private Parte arriba;
 
         //private Objeto letraT;
@@ -44,10 +48,16 @@ namespace GraficaOpenTK
             ejex = 0.001;
             escenario1 = new Escenario();
             camara = new Camara(this);
-            // iniciar objetos
+            //iniciar objetos
             //inicializaraCubo();
-            //inicializarT();
-            //aFront = new Poligono();
+            aFront = new Poligono();
+            letraT = new Objeto();
+            cubo = new Objeto();
+            inicializarT();
+            inicializaraCubo();
+            letraT.trasladar(new Punto(-0.3, 0.1, 0.0));
+            cubo.trasladar(new Punto(0.2, 0.1, 0.2));
+
             //arriba = new Parte();
         }
 
@@ -58,180 +68,17 @@ namespace GraficaOpenTK
             GL.ClearColor(Color4.White);
             GL.Enable(EnableCap.DepthTest);
 
-            // Iniciar el hilo de la consola
-            //consoleThread = new Thread(new ThreadStart(ControlarConsola));
-            //consoleThread.IsBackground = true;
-            //consoleThread.Start();
-
-            // arriba
-            Punto a = new Punto(-0.3, 0.4, 0.0);
-            Punto b = new Punto(-0.3, 0.2, 0.0);
-            Punto c = new Punto(0.3, 0.2, 0.0);
-            Punto d = new Punto(0.3, 0.4, 0.0);
-
-            Punto a1 = new Punto(-0.3, 0.4, 0.2);
-            Punto b1 = new Punto(-0.3, 0.2, 0.2);
-            Punto c1 = new Punto(0.3, 0.2, 0.2);
-            Punto d1 = new Punto(0.3, 0.4, 0.2);
-
-            Poligono aFront = new Poligono();
-            Poligono aBack = new Poligono();
-            Poligono aLeft = new Poligono();
-            Poligono aRigth = new Poligono();
-            Poligono aUp = new Poligono();
-            Poligono aDown = new Poligono();
-
-            PrimitiveType tipo = PrimitiveType.LineLoop;
-
-            aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(Color.Fuchsia);
-            aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(Color.Red);
-            aLeft.add(a).add(a1).add(b1).add(b).setTipo(tipo).setColor(Color.Black);
-            aRigth.add(d).add(d1).add(c1).add(c).setTipo(tipo).setColor(Color.Green);
-            aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
-            aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
-
-            //aFront.escalar(2.4);
-
-            Parte arriba = new Parte();
-
-            arriba.add("arriba", aUp)
-                .add("abajo", aDown)
-                .add("frente", aFront)
-                .add("atras", aBack)
-                .add("izquierda", aLeft)
-                .add("derecha", aRigth);
-
-            //arriba.escalar(0.3);
-
-
-            //escenario1.add("letraT", letraT);
-
-            // ---------------------------------------------------------------
-
-            //abajo
-
-            Punto f = new Punto(-0.1, 0.2, 0.0);
-            Punto g = new Punto(-0.1, -0.3, 0.0);
-            Punto h = new Punto(0.1, -0.3, 0.0);
-            Punto i = new Punto(0.1, 0.2, 0.0);
-
-            Punto f1 = new Punto(-0.1, 0.2, 0.2);
-            Punto g1 = new Punto(-0.1, -0.3, 0.2);
-            Punto h1 = new Punto(0.1, -0.3, 0.2);
-            Punto i1 = new Punto(0.1, 0.2, 0.2);
-
-            Poligono bFront = new Poligono();
-            Poligono bBack = new Poligono();
-            Poligono bLeft = new Poligono();
-            Poligono bRigth = new Poligono();
-            Poligono bUp = new Poligono();
-            Poligono bDown = new Poligono();
-
-            bFront.add(f).add(g).add(h).add(i).setTipo(tipo).setColor(Color.Fuchsia);
-            bBack.add(f1).add(g1).add(h1).add(i1).setTipo(tipo).setColor(Color.Red);
-            bLeft.add(f).add(f1).add(g1).add(g).setTipo(tipo).setColor(Color.Black);
-            bRigth.add(i).add(i1).add(h1).add(h).setTipo(tipo).setColor(Color.Green);
-            bUp.add(f).add(i).add(i1).add(f1).setTipo(tipo).setColor(Color.Gray);
-            bDown.add(g).add(h).add(h1).add(g1).setTipo(tipo).setColor(Color.Yellow);
-
-
-            Parte abajo = new Parte();
-            abajo.add("arriba", bUp)
-                .add("abajo", bDown)
-                .add("frente", bFront)
-                .add("atras", bBack)
-                .add("izquierda", bLeft)
-                .add("derecha", bRigth);
-
-            Objeto letraT = new Objeto();
-
-            letraT.add("arriba", arriba).add("abajo", abajo);
-            //letraT.trasladar(new Punto(-0.1,0,0));
-            //letraT.escalar(1.3);
-
-
-
-            // ----------------------------------------
-
-            Punto a2 = new Punto(-0.2, 0.2, 0.0);
-            Punto b2 = new Punto(-0.2, -0.2, 0.0);
-            Punto c2 = new Punto(0.2, -0.2, 0.0);
-            Punto d2 = new Punto(0.2, 0.2, 0.0);
-
-            Punto a21 = new Punto(-0.2, 0.2, 0.2);
-            Punto b21 = new Punto(-0.2, -0.2, 0.2);
-            Punto c21 = new Punto(0.2, -0.2, 0.2);
-            Punto d21 = new Punto(0.2, 0.2, 0.2);
-
-            // va2c2ios 
-            Poligono front = new Poligono();
-            Poligono back = new Poligono();
-            Poligono left = new Poligono();
-            Poligono right = new Poligono();
-            Poligono up = new Poligono();
-            Poligono down = new Poligono();
-
-
-            front.add(a2);
-            front.add(b2);
-            front.add(c2);
-            front.add(d2);
-
-            back.add(a21);
-            back.add(b21);
-            back.add(c21);
-            back.add(d21);
-
-            left.add(a2);
-            left.add(a21);
-            left.add(b21);
-            left.add(b2);
-
-            right.add(d2);
-            right.add(d21);
-            right.add(c21);
-            right.add(c2);
-
-            up.add(a2);
-            up.add(a21);
-            up.add(d21);
-            up.add(d2);
-
-            down.add(b2);
-            down.add(b21);
-            down.add(c21);
-            down.add(c2);
-
-            Parte cubo = new Parte();
-            cubo.add("a", front)
-                .add("b", back)
-                .add("c", left)
-                .add("d", right)
-                .add("e", up)
-                .add("f", down);
-
-            Objeto cubo3D = new Objeto();
-            cubo3D.add("cubo",cubo);
-
-            letraT.trasladar(new Punto(-0.3, 0, -0.1));
-            cubo3D.trasladar(new Punto(0.1, 0, 0.1));
 
 
 
 
-            escenario1.add("letra", letraT);
-            escenario1.add("cubo3D", cubo3D);
-            escenario1.verObjeto();
-            escenario1.verParte("letra");
-
-            //escenario1.escalar(0.7,"letra", "arriba");
+            //escenario1.escalar(0.7, "letra", "arriba");
 
 
 
-            //escenario1.trasladarObjeto("letra", new Punto(-0.4,0.4,0));
-            //escenario1.trasladar(new Punto(0.2,0,0),"letra","arriba");
-            escenario1.rotar(new Punto(45, 0, 0),"letra","abajo");
-            
+            //escenario1.trasladarObjeto("letraT", new Punto(-0.4,0.4,0));
+            //escenario1.trasladar(new Punto(0.2,0,0),"letraT","arriba");
+
 
         }
 
@@ -251,34 +98,15 @@ namespace GraficaOpenTK
 
             Poligono.cartesiano();
 
-
-
-
-            //arriba.draw();
-            //arriba.rotar(new Punto(0, 0, 1));
-
-
-            //aFront.draw();
-            //aFront.trasladar(new Punto(0.001,0.001,0.001));
-
-
-            //arriba.draw();
-            //arriba.rotar(new Punto(0, 1, 0));
-
-
-            //arriba.draw();
-            //arriba.trasladar(new Punto(0.001, 0.001, 0.001));
-
-            //letraT.draw();
-            //letraT.rotar(new Punto(0, 1, 0));
-
-
             escenario1.draw();
-                 
-            //Punto s = new Punto(0.001, 0.001, 0.001);
-            //escenario1.trasladar(s);
-            //escenario1.rotar(s);
-            //Console.WriteLine(escenario1.getCentro().ToString());
+            //escenario1.rotar(new Punto(0, 1, 0),"letraT","arriba");
+            escenario1.trasladar(new Punto(0.001,0,0),"letraT","arriba");
+
+            //IGrafica grafico;
+            //grafico = escenario1.getObj("letraT").getParte("arriba");
+            
+            //grafico.rotar();
+
 
             GL.Flush();
 
@@ -293,11 +121,7 @@ namespace GraficaOpenTK
         protected override void OnUnload(EventArgs e)
         {
             base.OnUnload(e);
-            running = false;  // Detener el hilo de la consola al salir
-            if (consoleThread != null && consoleThread.IsAlive)
-            {
-                consoleThread.Join();  // Esperar a que el hilo termine
-            }
+            
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -457,72 +281,66 @@ namespace GraficaOpenTK
 
         public void inicializaraCubo()
         {
-            //Punto a = new Punto(-0.2, 0.2, 0.0);
-            //Punto b = new Punto(-0.2, -0.2, 0.0);
-            //Punto c = new Punto(0.2, -0.2, 0.0);
-            //Punto d = new Punto(0.2, 0.2, 0.0);
+            Punto a2 = new Punto(-0.2, 0.2, 0.0);
+            Punto b2 = new Punto(-0.2, -0.2, 0.0);
+            Punto c2 = new Punto(0.2, -0.2, 0.0);
+            Punto d2 = new Punto(0.2, 0.2, 0.0);
 
-            //Punto a1 = new Punto(-0.2, 0.2, 0.2);
-            //Punto b1 = new Punto(-0.2, -0.2, 0.2);
-            //Punto c1 = new Punto(0.2, -0.2, 0.2);
-            //Punto d1 = new Punto(0.2, 0.2, 0.2);
+            Punto a21 = new Punto(-0.2, 0.2, 0.2);
+            Punto b21 = new Punto(-0.2, -0.2, 0.2);
+            Punto c21 = new Punto(0.2, -0.2, 0.2);
+            Punto d21 = new Punto(0.2, 0.2, 0.2);
 
-            //// vacios 
-            //Poligono front = new Poligono();
-            //Poligono back = new Poligono();
-            //Poligono left = new Poligono();
-            //Poligono right = new Poligono();
-            //Poligono up = new Poligono();
-            //Poligono down = new Poligono();
-
-
-            //front.add(a);
-            //front.add(b);
-            //front.add(c);
-            //front.add(d);
-
-            //back.add(a1);
-            //back.add(b1);
-            //back.add(c1);
-            //back.add(d1);
-
-            //left.add(a);
-            //left.add(a1);
-            //left.add(b1);
-            //left.add(b);
-
-            //right.add(d);
-            //right.add(d1);
-            //right.add(c1);
-            //right.add(c);
-
-            //up.add(a);
-            //up.add(a1);
-            //up.add(d1);
-            //up.add(d);
-
-            //down.add(b);
-            //down.add(b1);
-            //down.add(c1);
-            //down.add(c);
-
-            //Objeto cubo = new Objeto();
-            //cubo.add("front", front);
-            //cubo.add("back", back);
-            //cubo.add("left", left);
-            //cubo.add("right", right);
-            //cubo.setCentro(new Punto(0.4, 0.4, 0.1));
-
-            
+            // va2c2ios 
+            Poligono front = new Poligono();
+            Poligono back = new Poligono();
+            Poligono left = new Poligono();
+            Poligono right = new Poligono();
+            Poligono up = new Poligono();
+            Poligono down = new Poligono();
 
 
-            //Serializar.save("pruebaClass", cubo);
+            front.add(a2);
+            front.add(b2);
+            front.add(c2);
+            front.add(d2);
 
+            back.add(a21);
+            back.add(b21);
+            back.add(c21);
+            back.add(d21);
 
-            Objeto p = new Objeto();
-            p = Serializar.open("pruebaClass");
+            left.add(a2);
+            left.add(a21);
+            left.add(b21);
+            left.add(b2);
 
-            escenario1.add("cubo", p);
+            right.add(d2);
+            right.add(d21);
+            right.add(c21);
+            right.add(c2);
+
+            up.add(a2);
+            up.add(a21);
+            up.add(d21);
+            up.add(d2);
+
+            down.add(b2);
+            down.add(b21);
+            down.add(c21);
+            down.add(c2);
+
+            Parte cubo2 = new Parte();
+            cubo2.add("a", front)
+                .add("b", back)
+                .add("c", left)
+                .add("d", right)
+                .add("e", up)
+                .add("f", down);
+
+            cubo.add("cubo", cubo2);
+
+            escenario1.add("cubo", cubo);
 
             
         }
@@ -547,7 +365,7 @@ namespace GraficaOpenTK
             Poligono aUp = new Poligono();
             Poligono aDown = new Poligono();
 
-            PrimitiveType tipo = PrimitiveType.Quads;
+            PrimitiveType tipo = PrimitiveType.LineLoop;
 
             aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(Color.Fuchsia);
             aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(Color.Red);
@@ -556,14 +374,26 @@ namespace GraficaOpenTK
             aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(Color.Gray);
             aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(Color.Yellow);
 
-            //aFront.draw();
-            //aBack.draw();
-            //aLeft.draw();
-            //aRigth.draw();
-            //aUp.draw(); 
-            //aDown.draw();
+            //aFront.escalar(2.4);
 
-            // abajo
+            Parte arriba = new Parte();
+
+            arriba.add("arriba", aUp)
+                .add("abajo", aDown)
+                .add("frente", aFront)
+                .add("atras", aBack)
+                .add("izquierda", aLeft)
+                .add("derecha", aRigth);
+
+            //arriba.escalar(0.3);
+
+
+            //escenario1.add("letraT", letraT);
+
+            // ---------------------------------------------------------------
+
+            //abajo
+
             Punto f = new Punto(-0.1, 0.2, 0.0);
             Punto g = new Punto(-0.1, -0.3, 0.0);
             Punto h = new Punto(0.1, -0.3, 0.0);
@@ -588,21 +418,6 @@ namespace GraficaOpenTK
             bUp.add(f).add(i).add(i1).add(f1).setTipo(tipo).setColor(Color.Gray);
             bDown.add(g).add(h).add(h1).add(g1).setTipo(tipo).setColor(Color.Yellow);
 
-            //bFront.draw();
-            //bBack.draw();
-            //bLeft.draw();
-            //bRigth.draw();
-            //bUp.draw();
-            //bDown.draw();
-
-            Parte arriba = new Parte();
-            arriba.add("arriba", aUp)
-                .add("abajo", aDown)
-                .add("frente", aFront)
-                .add("atras", aBack)
-                .add("izquierda", aLeft)
-                .add("derecha", aRigth);
-
 
             Parte abajo = new Parte();
             abajo.add("arriba", bUp)
@@ -612,12 +427,13 @@ namespace GraficaOpenTK
                 .add("izquierda", bLeft)
                 .add("derecha", bRigth);
 
-
-            //arriba.draw();
-            //abajo.draw();
-
-            Objeto letraT = new Objeto();
             letraT.add("arriba", arriba).add("abajo", abajo);
+
+
+            //Objeto p = new Objeto();
+            //p = Serializar.open("letraT");
+
+            escenario1.add("letraT", letraT);
 
             //letraT.draw();
 

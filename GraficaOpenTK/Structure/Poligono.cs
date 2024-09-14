@@ -79,6 +79,7 @@ namespace GraficaOpenTK.Structure
                 item.rotar(angulo.X, angulo.Y, angulo.Z,this.centro);
             }
         }
+
         public void trasladar(Punto valor)
         {
 
@@ -92,12 +93,10 @@ namespace GraficaOpenTK.Structure
         }
         public void escalar(double factor)
         {
-
             foreach (var item in listaPuntos)
             {                
                 item.escalar(factor, centro);    
             }
-
         }
         public void setCentro(Punto newCentro)
         {
@@ -114,6 +113,8 @@ namespace GraficaOpenTK.Structure
             if (listaPuntos.Count == 0)
                 return new Punto(0, 0, 0);
 
+
+            // se saca el mayor y el menor de cada eje
             double minX = listaPuntos.Min(p => p.X);
             double maxX = listaPuntos.Max(p => p.X);
 
@@ -124,11 +125,13 @@ namespace GraficaOpenTK.Structure
             double maxZ = listaPuntos.Max(p => p.Z);
 
 
-            // Cálculo del centro en los ejes X y Y
+            // se suma mayor + menor y luego se divide entre 2
             double centroX = (minX + maxX) / 2;
             double centroY = (minY + maxY) / 2;
             double centroZ = (minZ+ maxZ) / 2;
 
+
+            //devuelve el centro de masa
             return new Punto(centroX, centroY, centroZ);
         }
         public Poligono setTipo(PrimitiveType tipo)
