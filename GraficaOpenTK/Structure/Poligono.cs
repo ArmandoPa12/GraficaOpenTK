@@ -46,6 +46,7 @@ namespace GraficaOpenTK.Structure
         public Poligono add(Punto punto)
         {
             this.listaPuntos.Add(punto);
+            this.centro = this.CalcularCentroDeMasa();  
             return this; 
         }
         public void remove(Punto punto)
@@ -64,7 +65,8 @@ namespace GraficaOpenTK.Structure
             GL.Begin(this.primitiveType);
             foreach (var item in listaPuntos)
             {   
-                GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
+                //GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
+                GL.Vertex3(item.X, item.Y, item.Z);
             }
             GL.End();
             GL.Flush();
@@ -186,6 +188,68 @@ namespace GraficaOpenTK.Structure
                 GL.Vertex3(0, i, -width);
                 GL.Vertex3(0, i, width);
                 GL.End();
+            }
+        }
+
+        public void rotar(Punto angulo)
+        {
+
+            Punto centroMasa = this.centro;
+            Console.WriteLine(this.centro);
+
+            Matrix4 matrizX = Matrix4.CreateRotationX((float)MathHelper.RadiansToDegrees(angulo.X));
+            Matrix4 matrizY = Matrix4.CreateRotationY((float)MathHelper.RadiansToDegrees(angulo.Y));
+            Matrix4 matrizZ = Matrix4.CreateRotationZ((float)MathHelper.RadiansToDegrees(angulo.Z));
+
+            Matrix4 rotacionTotal = matrizZ * matrizY * matrizX;
+
+            foreach (var item in listaPuntos)
+            {
+                Vector4 punto = new Vector4(
+                    (float)(item.X - centroMasa.X),
+                    (float)(item.Y - centroMasa.Y),
+                    (float)(item.Z - centroMasa.Z),
+                    1.0f
+                );
+
+                Vector4 resultado = rotacionTotal * punto;
+
+                item.X = resultado.X + centroMasa.X;
+                item.Y = resultado.Y + centroMasa.Y;
+                item.Z = resultado.Z + centroMasa.Z;
+            }
+
+
+        }
+
+        public void escalar(double factor)
+        {
+            Matrix4 preparar = Matrix4.CreateScale((float)factor);
+            Vector4 resultado;
+            foreach (var item in listaPuntos)
+            {
+                Vector4 vector = new Vector4((float)item.X, (float)item.Y, (float)item.Z, 1);
+                resultado = vector * preparar;
+                item.X = resultado.X;
+                item.Y = resultado.Y;
+                item.Z = resultado.Z;
+            }
+
+        }
+
+        public void trasladar(Punto valor)
+        {
+            Matrix4 preparar = Matrix4.CreateTranslation((float)valor.X, (float)valor.Y, (float)valor.Z);
+
+            Vector4 resultado;
+            foreach (var item in listaPuntos)
+            {
+                Vector4 vector = new Vector4((float)item.X, (float)item.Y, (float)item.Z,1);
+                resultado = vector * preparar;
+
+                item.X = resultado.X; 
+                item.Y = resultado.Y; 
+                item.Z = resultado.Z;
             }
         }
     }

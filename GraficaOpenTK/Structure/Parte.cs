@@ -1,7 +1,9 @@
 ﻿using GraficaOpenTK.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +28,7 @@ namespace GraficaOpenTK.Structure
         public Parte add(string key, Poligono value)
         {
             listaPoligonos.Add(key, value);
+            this.centro = this.CalcularCentroDeMasa();
             return this;
         }
         public void remove(string key) 
@@ -36,6 +39,7 @@ namespace GraficaOpenTK.Structure
         {
             return listaPoligonos[key];
         }
+ 
 
         public void draw()
         {
@@ -55,6 +59,71 @@ namespace GraficaOpenTK.Structure
             {
                 kvp.Value.setCentro(centro);
             }
+            this.centro = centro;
         }
+
+        public void rotar(Punto angulo)
+        {
+            foreach (var item in listaPoligonos)
+            {
+                item.Value.setCentro(this.centro);
+                item.Value.rotar(angulo);
+            }
+        }
+
+        public void escalar(double factor)
+        {
+            foreach (var item in listaPoligonos)
+            {
+                item.Value.setCentro(this.centro);
+                item.Value.escalar(factor);
+            }
+            this.centro = CalcularCentroDeMasa();
+
+        }
+
+        public void trasladar(Punto valor)
+        {
+
+            foreach (var item in listaPoligonos)
+            {
+                item.Value.setCentro(this.centro);
+                item.Value.trasladar(valor);
+            }
+            this.centro = CalcularCentroDeMasa();
+
+        }
+        public Punto CalcularCentroDeMasa()
+        {
+            if (listaPoligonos.Count == 0)
+                return new Punto(0, 0, 0);
+
+            // Sumar los centros de masa de todos los polígonos
+            double sumaX = 0;
+            double sumaY = 0;
+            double sumaZ = 0;
+
+            // Iterar por cada polígono
+            foreach (KeyValuePair<string, Poligono> kvp in listaPoligonos)
+            {
+                // Calcula el centro de masa de cada polígono
+                Punto centroPoligono = kvp.Value.CalcularCentroDeMasa();
+
+                // Sumar las coordenadas de los centros
+                sumaX += centroPoligono.X;
+                sumaY += centroPoligono.Y;
+                sumaZ += centroPoligono.Z;
+            }
+
+            // Promediar los centros de masa de los polígonos
+            int numPoligonos = listaPoligonos.Count;
+            double promedioX = sumaX / numPoligonos;
+            double promedioY = sumaY / numPoligonos;
+            double promedioZ = sumaZ / numPoligonos;
+
+            // Retornar el centro de masa de la Parte
+            return new Punto(promedioX, promedioY, promedioZ);
+        }
+
     }
 }
