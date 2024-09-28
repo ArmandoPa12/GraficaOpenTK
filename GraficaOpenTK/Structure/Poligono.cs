@@ -62,7 +62,7 @@ namespace GraficaOpenTK.Structure
         public void draw()
         {
             GL.Color4(this.color);
-            GL.Begin(this.primitiveType);
+            GL.Begin(PrimitiveType.LineLoop);
             foreach (var item in listaPuntos)
             {   
                 //GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
@@ -195,7 +195,6 @@ namespace GraficaOpenTK.Structure
         {
 
             Punto centroMasa = this.centro;
-            Console.WriteLine(this.centro);
 
             Matrix4 matrizX = Matrix4.CreateRotationX((float)MathHelper.RadiansToDegrees(angulo.X));
             Matrix4 matrizY = Matrix4.CreateRotationY((float)MathHelper.RadiansToDegrees(angulo.Y));
@@ -205,10 +204,7 @@ namespace GraficaOpenTK.Structure
 
             foreach (var item in listaPuntos)
             {
-                Vector4 punto = new Vector4(
-                    (float)(item.X - centroMasa.X),
-                    (float)(item.Y - centroMasa.Y),
-                    (float)(item.Z - centroMasa.Z),
+                Vector4 punto = new Vector4((float)(item.X - centroMasa.X),(float)(item.Y - centroMasa.Y),(float)(item.Z - centroMasa.Z),
                     1.0f
                 );
 

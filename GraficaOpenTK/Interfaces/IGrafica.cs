@@ -11,6 +11,7 @@ namespace GraficaOpenTK.Interfaces
     {
         public Punto centro { get; set; }
         public void draw();
+
         public void setCentro(Punto centro);
         public void rotar(Punto angulo);
 
@@ -18,6 +19,5 @@ namespace GraficaOpenTK.Interfaces
 
         public void trasladar(Punto valor);
         public Punto CalcularCentroDeMasa();
-        //public T add();
     }
 }
