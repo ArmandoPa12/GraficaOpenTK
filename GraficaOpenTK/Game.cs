@@ -57,6 +57,9 @@ namespace GraficaOpenTK
 
             //polimorfico = escenario1;
             polimorfico = escenario1.getObjeto("letraT").getParte("arriba");
+            //polimorfico.escalar(1.8);
+
+            polimorfico.rotar(new Punto(45,0,0));
 
             //polimorfico.trasladar(new Punto(0.4,0.1,0.0));
 
@@ -67,6 +70,7 @@ namespace GraficaOpenTK
             //polimorfico.rotar(new Punto(45, 0, 0));
 
             //IGrafica p = escenario1.getObjeto("letraT").getParte("arriba");
+            //polimorfico.escalar(0.7);
 
 
         }
@@ -93,7 +97,7 @@ namespace GraficaOpenTK
             //polimorfico.draw();
             escenario1.draw();
             //polimorfico.rotar(new Punto(1,0,0));
-            polimorfico.trasladar(new Punto(0.001, 0.0, 0.0));
+            //polimorfico.trasladar(new Punto(0.001, 0.0, 0.0));
 
 
 

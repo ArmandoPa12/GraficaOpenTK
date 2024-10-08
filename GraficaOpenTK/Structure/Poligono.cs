@@ -224,11 +224,11 @@ namespace GraficaOpenTK.Structure
             Vector4 resultado;
             foreach (var item in listaPuntos)
             {
-                Vector4 vector = new Vector4((float)item.X, (float)item.Y, (float)item.Z, 1);
+                Vector4 vector = new Vector4((float)item.X - (float)centro.X, (float)item.Y - (float)centro.Y, (float)item.Z - (float)centro.Z, 1);
                 resultado = vector * preparar;
-                item.X = resultado.X;
-                item.Y = resultado.Y;
-                item.Z = resultado.Z;
+                item.X = resultado.X + centro.X;
+                item.Y = resultado.Y + centro.Y;
+                item.Z = resultado.Z + centro.Z;
             }
 
         }
