@@ -29,6 +29,23 @@ namespace GraficaOpenTK.Class
             }
         }
 
+        public static void saveParte(string name, Parte objeto, string path = @"C:\Users\Usuario\source\repos\GraficaOpenTK\GraficaOpenTK\files\")
+        {
+            string save = JsonSerializer.Serialize(objeto);
+            path += name + ".json";
+            try
+            {
+                File.WriteAllText(path, save);
+                Console.WriteLine("objeto guardado");
+            }
+            catch (Exception e)
+            {
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+        }
+
         public static Objeto open(string name, string path = @"C:\Users\Usuario\source\repos\GraficaOpenTK\GraficaOpenTK\files\")
         {
             Objeto objeto = new Objeto();
@@ -44,6 +61,24 @@ namespace GraficaOpenTK.Class
             }
             return objeto;
         }
+        public static Parte openParte(string name, string path = @"C:\Users\Usuario\source\repos\GraficaOpenTK\GraficaOpenTK\files\")
+        {
+            Parte objeto = new Parte();
+            path += name + ".json";
+            try
+            {
+                string serie = File.ReadAllText(path);
+                objeto = JsonSerializer.Deserialize<Parte>(serie);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return objeto;
+        }
+
+
+
 
     }
 }

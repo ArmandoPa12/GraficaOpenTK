@@ -13,16 +13,21 @@ namespace GraficaOpenTK.Structure
     {
         public Punto centro {  get; set; }
         public Dictionary<string, Poligono> listaPoligonos { get; set; }
+        public Punto CentroDependiente { get; set ; }
 
         public Parte()
         {
             centro = new Punto();
             listaPoligonos = new Dictionary<string, Poligono>();
+            this.CentroDependiente = new Punto();
+
         }
         public Parte(Punto centro)
         {
             this.centro = centro;
             listaPoligonos = new Dictionary<string, Poligono>();
+            this.CentroDependiente = new Punto();
+
         }
 
         public Parte add(string key, Poligono value)
@@ -81,7 +86,15 @@ namespace GraficaOpenTK.Structure
             this.centro = CalcularCentroDeMasa();
 
         }
+        public void seeCenter()
+        {
 
+            foreach (var item in listaPoligonos)
+            {
+                item.Value.seeCenter();
+            }
+            
+        }
         public void trasladar(Punto valor)
         {
 
@@ -122,8 +135,10 @@ namespace GraficaOpenTK.Structure
             double promedioZ = sumaZ / numPoligonos;
 
             // Retornar el centro de masa de la Parte
-            return new Punto(promedioX, promedioY, promedioZ);
+            return new Punto(promedioX + this.CentroDependiente.X, promedioY + this.CentroDependiente.Y, promedioZ + this.CentroDependiente.Z);
         }
+
+
 
     }
 }

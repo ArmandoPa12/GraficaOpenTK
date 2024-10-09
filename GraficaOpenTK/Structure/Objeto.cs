@@ -12,23 +12,31 @@ namespace GraficaOpenTK.Structure
     {
         public IDictionary<string, Parte> listaPartes { get; set; } = new Dictionary<string, Parte>();
         public Punto centro { get; set; } = new Punto();
+        public Punto CentroDependiente { get; set; }
+
 
         public Objeto()
         {
             centro = new Punto();
             listaPartes = new Dictionary<string, Parte>();
+            this.CentroDependiente = new Punto();
+
         }
         public Objeto(Punto punto)
         {
             centro = punto;
             listaPartes = new Dictionary<string, Parte>();
+            this.CentroDependiente = new Punto();
+
         }
         public Objeto(Punto punto, IDictionary<string, Parte> lista)
         {
             centro = punto;
             listaPartes = lista;
+            this.CentroDependiente = new Punto();
+
         }
-        
+
         public void setCentro(Punto newCentro)
         {
             centro = newCentro;
@@ -119,7 +127,7 @@ namespace GraficaOpenTK.Structure
             double promedioZ = sumaZ / numPartes;
 
             // Retornar el centro de masa del Objeto.
-            return new Punto(promedioX, promedioY, promedioZ);
+            return new Punto(promedioX + this.CentroDependiente.X, promedioY + this.CentroDependiente.Y, promedioZ + this.CentroDependiente.Z);
         }
     }
 }

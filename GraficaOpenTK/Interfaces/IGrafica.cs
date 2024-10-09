@@ -19,5 +19,6 @@ namespace GraficaOpenTK.Interfaces
 
         public void trasladar(Punto valor);
         public Punto CalcularCentroDeMasa();
+        public Punto CentroDependiente {  get; set; }
     }
 }

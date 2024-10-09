@@ -32,20 +32,27 @@ namespace GraficaOpenTK
         private Camara camara;
 
         private IGrafica polimorfico;
+
+        private List<Accion> acciones = new List<Accion>();
+        private int index = 0;
+        private double tiempoAcumulado = 0;
+
+        private Parte arriba = new Parte();
+        private Objeto global = new Objeto();
         public Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
         {
             ejex = 0.001;
             escenario1 = new Escenario();
             camara = new Camara(this);
-            inicializaraCubo();
-            inicializarT();
-            
+            //inicializaraCubo();
+            //inicializarT();
+
         }
 
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e); 
+            base.OnLoad(e);
             GL.ClearColor(Color4.White);
             GL.Enable(EnableCap.DepthTest);
 
@@ -56,10 +63,10 @@ namespace GraficaOpenTK
 
 
             //polimorfico = escenario1;
-            polimorfico = escenario1.getObjeto("letraT").getParte("arriba");
+            //polimorfico = escenario1.getObjeto("letraT").getParte("arriba");
             //polimorfico.escalar(1.8);
 
-            polimorfico.rotar(new Punto(45,0,0));
+            //polimorfico.rotar(new Punto(45,0,0));
 
             //polimorfico.trasladar(new Punto(0.4,0.1,0.0));
 
@@ -69,10 +76,49 @@ namespace GraficaOpenTK
             //polimorfico.rotar(new Punto(e.Time * speed, 0, 0));
             //polimorfico.rotar(new Punto(45, 0, 0));
 
-            //IGrafica p = escenario1.getObjeto("letraT").getParte("arriba");
-            //polimorfico.escalar(0.7);
+           
 
 
+
+            //Accion a1 = new Accion("letraT", "rotar", new Punto(0, 50, 0), escenario1.getObjeto("letraT"));
+            //Accion a2 = new Accion("arriba", "trasladar", new Punto(0, 0.3, 0), escenario1.getObjeto("letraT").getParte("arriba"));
+            //Accion a3 = new Accion("arriba", "rotar", new Punto(0, 0, 10), escenario1.getObjeto("letraT").getParte("arriba"));
+
+            //acciones.Add(a1);
+            //acciones.Add(a2);
+            //acciones.Add(a3);
+
+
+
+
+
+        }
+
+        private void libreto(int i, FrameEventArgs e)
+        {
+            IGrafica polimorfico;
+            tiempoAcumulado += e.Time;
+            if (i < acciones.Count() && tiempoAcumulado >= 1.0)
+            {
+                if (acciones[i].accion == "trasladar")
+                {
+                    polimorfico = acciones[i].polimorfico;
+                    polimorfico.trasladar(acciones[i].punto);
+                }
+                if (acciones[i].accion == "rotar")
+                {
+                    polimorfico = acciones[i].polimorfico;
+                    polimorfico.rotar(acciones[i].punto);
+                }
+                if (acciones[i].accion == "escalar")
+                {
+                    polimorfico = acciones[i].polimorfico;
+                    //polimorfico.trasladar(acciones[i].punto);
+                }
+
+                this.index++;
+                tiempoAcumulado = 0;
+            }
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -91,24 +137,54 @@ namespace GraficaOpenTK
             Poligono.cartesiano();
 
 
+            Parte torso = Serializar.openParte("ITorso");
+            torso.draw();
+            torso.seeCenter();
+
+            Parte antBrazoIzq = Serializar.openParte("IAntBraIzq");
+            antBrazoIzq.draw();
+            antBrazoIzq.seeCenter();
+
+
+            Parte BrazoIzq = Serializar.openParte("IBraIzq");
+
+            antBrazoIzq.CentroDependiente = new Punto(-0.065,0,0);
+            antBrazoIzq.setCentro(antBrazoIzq.CalcularCentroDeMasa());
+            BrazoIzq.draw();
+            BrazoIzq.seeCenter();
+
+            //Serializar.saveParte("IAntBraIzq", antBrazoIzq);
+
+
+            //arriba.seeCenter();
+            //arriba.draw();
+            //arriba.rotar(new Punto(0, 1,0));
+
+
+
+            //antBrazoIzq.rotar(new Punto(0, 1, 0));
+            //antBrazoIzq.draw();
+
+            //arriba.draw();
 
             //polimorfico = escenario1;
 
             //polimorfico.draw();
-            escenario1.draw();
+            //escenario1.draw();
+
+            //libreto(this.index, e);
+
+
             //polimorfico.rotar(new Punto(1,0,0));
             //polimorfico.trasladar(new Punto(0.001, 0.0, 0.0));
 
-
-
-
-
-
+            //arriba.draw();
 
             GL.Flush();
 
             Context.SwapBuffers();
         }
+        
 
         protected override void OnResize(EventArgs e)
         {
@@ -139,6 +215,45 @@ namespace GraficaOpenTK
             camara.MouseWheel(e);
         }
 
+        public void cuboGenerico()
+        {
+            //// arriba
+            //Punto a = new Punto(0.23, 0.53, 0.05);
+            //Punto b = new Punto(0.23, 0.47, 0.05);
+            //Punto c = new Punto(0.4, 0.47, 0.05);
+            //Punto d = new Punto(0.4, 0.53, 0.05);
+
+            //Punto a1 = new Punto(0.23, 0.53, -0.05);
+            //Punto b1 = new Punto(0.23, 0.47, -0.05);
+            //Punto c1 = new Punto(0.4, 0.47, -0.05);
+            //Punto d1 = new Punto(0.4, 0.53, -0.05);
+
+            //Poligono aFront = new Poligono();
+            //Poligono aBack = new Poligono();
+            //Poligono aLeft = new Poligono();
+            //Poligono aRigth = new Poligono();
+            //Poligono aUp = new Poligono();
+            //Poligono aDown = new Poligono();
+
+            //PrimitiveType tipo = PrimitiveType.LineLoop;
+            //Color color = Color.Gray;
+
+            //aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(color);
+            //aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(color);
+            //aLeft.add(a).add(a1).add(b1).add(b).setTipo(tipo).setColor(color);
+            //aRigth.add(d).add(d1).add(c1).add(c).setTipo(tipo).setColor(color);
+            //aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(color);
+            //aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(color);
+
+
+
+            //arriba.add("arriba", aUp)
+            //    .add("abajo", aDown)
+            //    .add("frente", aFront)
+            //    .add("atras", aBack)
+            //    .add("izquierda", aLeft)
+            //    .add("derecha", aRigth);
+        }
 
         public void inicializaraCubo()
         {
@@ -208,10 +323,10 @@ namespace GraficaOpenTK
 
             //Serializar.save("example",cubo);
 
-            Objeto p = new Objeto();
-            p = Serializar.open("example");
+            //Objeto p = new Objeto();
+            //p = Serializar.open("example");
 
-            escenario1.add("cubo", p);
+            //escenario1.add("cubo", p);
             
         }
 
@@ -311,16 +426,16 @@ namespace GraficaOpenTK
             ////escenario1.add("letraT", letraT);
 
 
-            Objeto re = new Objeto();
-            re = Serializar.open("letraTnew");
-            re.trasladar(new Punto(-0.5, 0.2, 0));
+            //Objeto re = new Objeto();
+            //re = Serializar.open("letraTnew");
+            //re.trasladar(new Punto(-0.5, 0.2, 0));
 
             //Objeto re2 = new Objeto();
             //re2 = Serializar.open("letraTnew");
             //re2.trasladar(new Punto(0.5, -0.2, 0));
 
 
-            escenario1.add("letraT", re);
+            //escenario1.add("letraT", re);
                 //.add("letraT2",re2);
             
             //Serializar.save("letraTnew", letraT);

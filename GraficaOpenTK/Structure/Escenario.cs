@@ -14,7 +14,8 @@ namespace GraficaOpenTK.Structure
     {
         public IDictionary<string, Objeto> listaObjetos { get; set; } = new Dictionary<string, Objeto>();
         public Punto centro { get; set; } = new Punto();
-       
+        public Punto CentroDependiente { get; set ; }
+
         public Escenario()
         {
             centro = new Punto();

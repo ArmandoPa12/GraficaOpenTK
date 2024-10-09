@@ -20,6 +20,7 @@ namespace GraficaOpenTK.Structure
 
         public Color color { get; set; } = new Color();
         public PrimitiveType primitiveType { get; set; } = new PrimitiveType();
+        public Punto CentroDependiente { get; set; } 
 
         public Poligono() 
         {
@@ -27,6 +28,7 @@ namespace GraficaOpenTK.Structure
             this.listaPuntos = new List<Punto>();
             this.color = Color.Red;
             this.primitiveType = PrimitiveType.LineLoop;
+            this.CentroDependiente = new Punto();
         }
         public Poligono(Punto centro)
         {
@@ -34,13 +36,15 @@ namespace GraficaOpenTK.Structure
             this.listaPuntos = new List<Punto>();
             this.color = Color.Red;
             this.primitiveType = PrimitiveType.LineLoop;
+            this.CentroDependiente = new Punto();
         }
         public Poligono(List<Punto> lista ,Punto centro,Color color, PrimitiveType tipo = PrimitiveType.LineLoop)
         {
             this.centro = centro;
             this.color = color;
             this.primitiveType = tipo; 
-            this.listaPuntos = lista;   
+            this.listaPuntos = lista;
+            this.CentroDependiente = new Punto();
         }
 
         public Poligono add(Punto punto)
@@ -62,7 +66,7 @@ namespace GraficaOpenTK.Structure
         public void draw()
         {
             GL.Color4(this.color);
-            GL.Begin(PrimitiveType.LineLoop);
+            GL.Begin(this.primitiveType);
             foreach (var item in listaPuntos)
             {   
                 //GL.Vertex3(item.X + centro.X, item.Y + centro.Y, item.Z + centro.Z);
@@ -100,6 +104,10 @@ namespace GraficaOpenTK.Structure
             double centroY = (minY + maxY) / 2;
             double centroZ = (minZ+ maxZ) / 2;
 
+            centroX = centroX + this.CentroDependiente.X;
+            centroY = centroY + this.CentroDependiente.Y;
+            centroZ = centroZ + this.CentroDependiente.Z;
+
             return new Punto(centroX, centroY, centroZ);
         }
         public Poligono setTipo(PrimitiveType tipo)
@@ -116,28 +124,42 @@ namespace GraficaOpenTK.Structure
 
         public void seeCenter()
         {
-            // Dibuja el eje X centrado en ini
+            // Tamaño del cuadrado para representar el centro de masa
+            double size = 0.005;  // Ajusta este tamaño para que sea visible pero pequeño
+
+            // Dibuja un pequeño cuadrado centrado en el centro de masa
+            GL.Begin(PrimitiveType.Quads);
+            GL.Color4(Color.White);  // Color del centro de masa
+
+            // Esquinas del cuadrado
+            GL.Vertex3(centro.X - size, centro.Y - size, centro.Z);
+            GL.Vertex3(centro.X + size, centro.Y - size, centro.Z);
+            GL.Vertex3(centro.X + size, centro.Y + size, centro.Z);
+            GL.Vertex3(centro.X - size, centro.Y + size, centro.Z);
+
+            GL.End();
+
+            // Dibuja líneas de referencia para los ejes
             GL.Begin(PrimitiveType.Lines);
+
+            // Eje X en rojo
             GL.Color4(Color.Red);
-            GL.Vertex3(centro.X - 0.1f, centro.Y, centro.Z); // Extremo negativo del eje X
-            GL.Vertex3(centro.X + 0.1f, centro.Y, centro.Z); // Extremo positivo del eje X
-            GL.End();
+            GL.Vertex3(centro.X - 0.05f, centro.Y, centro.Z);  // Extremo negativo del eje X
+            GL.Vertex3(centro.X + 0.05f, centro.Y, centro.Z);  // Extremo positivo del eje X
 
-            // Dibuja el eje Y centrado en ini
-            GL.Begin(PrimitiveType.Lines);
+            // Eje Y en verde
             GL.Color4(Color.Green);
-            GL.Vertex3(centro.X, centro.Y - 0.1f, centro.Z); // Extremo negativo del eje Y
-            GL.Vertex3(centro.X, centro.Y + 0.1f, centro.Z); // Extremo positivo del eje Y
-            GL.End();
+            GL.Vertex3(centro.X, centro.Y - 0.05f, centro.Z);  // Extremo negativo del eje Y
+            GL.Vertex3(centro.X, centro.Y + 0.05f, centro.Z);  // Extremo positivo del eje Y
 
-            // Dibuja el eje Z centrado en ini
-            GL.Begin(PrimitiveType.Lines);
+            // Eje Z en azul
             GL.Color4(Color.Blue);
-            GL.Vertex3(centro.X, centro.Y, centro.Z - 0.1f); // Extremo negativo del eje Z
-            GL.Vertex3(centro.X, centro.Y, centro.Z + 0.1f); // Extremo positivo del eje Z
+            GL.Vertex3(centro.X, centro.Y, centro.Z - 0.05f);  // Extremo negativo del eje Z
+            GL.Vertex3(centro.X, centro.Y, centro.Z + 0.05f);  // Extremo positivo del eje Z
+
             GL.End();
 
-            GL.Flush();
+            GL.Flush();  // Asegura que todas las operaciones de OpenGL se ejecuten
         }
 
         public static void cartesiano(double escala = 0.1f)
@@ -230,6 +252,7 @@ namespace GraficaOpenTK.Structure
                 item.Y = resultado.Y + centro.Y;
                 item.Z = resultado.Z + centro.Z;
             }
+            this.centro = this.CalcularCentroDeMasa();
 
         }
 
@@ -247,6 +270,7 @@ namespace GraficaOpenTK.Structure
                 item.Y = resultado.Y; 
                 item.Z = resultado.Z;
             }
+            this.centro = this.CalcularCentroDeMasa();
         }
     }
 }
