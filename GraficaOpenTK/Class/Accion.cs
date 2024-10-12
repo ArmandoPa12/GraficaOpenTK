@@ -14,6 +14,7 @@ namespace GraficaOpenTK.Class
         public string accion { get; set; }
         public Punto punto { get; set; }
         public IGrafica polimorfico { get; set; }
+        //public Punto centroTemp {  get; set; }
 
         public Accion(string nombre, string accion, Punto punto, IGrafica poli)
         {
@@ -21,6 +22,7 @@ namespace GraficaOpenTK.Class
             this.accion = accion;
             this.punto = punto;
             this.polimorfico = poli;
+            //this.centroTemp = centroTemp;
         }
     }
 }

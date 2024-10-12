@@ -1,4 +1,5 @@
 ﻿using GraficaOpenTK.Interfaces;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -77,7 +78,7 @@ namespace GraficaOpenTK.Structure
             }
         }
 
-        public void escalar(double factor)
+        public void escalar(Punto factor)
         {
             foreach (var item in listaPartes)
             {
@@ -128,6 +129,22 @@ namespace GraficaOpenTK.Structure
 
             // Retornar el centro de masa del Objeto.
             return new Punto(promedioX + this.CentroDependiente.X, promedioY + this.CentroDependiente.Y, promedioZ + this.CentroDependiente.Z);
+        }
+
+        public void seeCenter()
+        {
+            foreach (var item in listaPartes)
+            {
+                item.Value.seeCenter();
+            }
+        }
+
+        public void setPrimitiveType(PrimitiveType tipo)
+        {
+            foreach (var item in listaPartes)
+            {
+                item.Value.setPrimitiveType(tipo);
+            }
         }
     }
 }

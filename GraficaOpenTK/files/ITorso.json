@@ -1,1 +1,290 @@
-{"centro":{"X":0,"Y":0.35000000000000003,"Z":0},"listaPoligonos":{"arriba":{"centro":{"X":0,"Y":0.35000000000000003,"Z":0},"listaPuntos":[{"X":-0.1,"Y":0.5,"Z":0.05},{"X":0.1,"Y":0.5,"Z":0.05},{"X":0.1,"Y":0.5,"Z":-0.05},{"X":-0.1,"Y":0.5,"Z":-0.05}],"color":{"R":0,"G":0,"B":0,"A":0,"IsKnownColor":false,"IsEmpty":true,"IsNamedColor":false,"IsSystemColor":false,"Name":"0"},"primitiveType":2,"CentroDependiente":{"X":0,"Y":0,"Z":0}},"abajo":{"centro":{"X":0,"Y":0.35000000000000003,"Z":0},"listaPuntos":[{"X":-0.1,"Y":0.2,"Z":0.05},{"X":0.1,"Y":0.2,"Z":0.05},{"X":0.1,"Y":0.2,"Z":-0.05},{"X":-0.1,"Y":0.2,"Z":-0.05}],"color":{"R":0,"G":0,"B":0,"A":0,"IsKnownColor":false,"IsEmpty":true,"IsNamedColor":false,"IsSystemColor":false,"Name":"0"},"primitiveType":2,"CentroDependiente":{"X":0,"Y":0,"Z":0}},"frente":{"centro":{"X":0,"Y":0.35000000000000003,"Z":0},"listaPuntos":[{"X":-0.1,"Y":0.5,"Z":0.05},{"X":-0.1,"Y":0.2,"Z":0.05},{"X":0.1,"Y":0.2,"Z":0.05},{"X":0.1,"Y":0.5,"Z":0.05}],"color":{"R":0,"G":0,"B":0,"A":0,"IsKnownColor":false,"IsEmpty":true,"IsNamedColor":false,"IsSystemColor":false,"Name":"0"},"primitiveType":2,"CentroDependiente":{"X":0,"Y":0,"Z":0}},"atras":{"centro":{"X":0,"Y":0.35000000000000003,"Z":0},"listaPuntos":[{"X":-0.1,"Y":0.5,"Z":-0.05},{"X":-0.1,"Y":0.2,"Z":-0.05},{"X":0.1,"Y":0.2,"Z":-0.05},{"X":0.1,"Y":0.5,"Z":-0.05}],"color":{"R":0,"G":0,"B":0,"A":0,"IsKnownColor":false,"IsEmpty":true,"IsNamedColor":false,"IsSystemColor":false,"Name":"0"},"primitiveType":2,"CentroDependiente":{"X":0,"Y":0,"Z":0}},"izquierda":{"centro":{"X":0,"Y":0.35000000000000003,"Z":0},"listaPuntos":[{"X":-0.1,"Y":0.5,"Z":0.05},{"X":-0.1,"Y":0.5,"Z":-0.05},{"X":-0.1,"Y":0.2,"Z":-0.05},{"X":-0.1,"Y":0.2,"Z":0.05}],"color":{"R":0,"G":0,"B":0,"A":0,"IsKnownColor":false,"IsEmpty":true,"IsNamedColor":false,"IsSystemColor":false,"Name":"0"},"primitiveType":2,"CentroDependiente":{"X":0,"Y":0,"Z":0}},"derecha":{"centro":{"X":0,"Y":0.35000000000000003,"Z":0},"listaPuntos":[{"X":0.1,"Y":0.5,"Z":0.05},{"X":0.1,"Y":0.5,"Z":-0.05},{"X":0.1,"Y":0.2,"Z":-0.05},{"X":0.1,"Y":0.2,"Z":0.05}],"color":{"R":0,"G":0,"B":0,"A":0,"IsKnownColor":false,"IsEmpty":true,"IsNamedColor":false,"IsSystemColor":false,"Name":"0"},"primitiveType":2,"CentroDependiente":{"X":0,"Y":0,"Z":0}}},"CentroDependiente":{"X":0,"Y":0,"Z":0}}
+{
+  "centro": {
+    "X": 0,
+    "Y": 0.35000000000000003,
+    "Z": 0
+  },
+  "listaPoligonos": {
+    "arriba": {
+      "centro": {
+        "X": 0,
+        "Y": 0.35000000000000003,
+        "Z": 0
+      },
+      "listaPuntos": [
+        {
+          "X": -0.1,
+          "Y": 0.5,
+          "Z": 0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.5,
+          "Z": 0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.5,
+          "Z": -0.05
+        },
+        {
+          "X": -0.1,
+          "Y": 0.5,
+          "Z": -0.05
+        }
+      ],
+      "color": {
+        "R": 0,
+        "G": 0,
+        "B": 0,
+        "A": 0,
+        "IsKnownColor": false,
+        "IsEmpty": true,
+        "IsNamedColor": false,
+        "IsSystemColor": false,
+        "Name": "0"
+      },
+      "primitiveType": 2,
+      "CentroDependiente": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "abajo": {
+      "centro": {
+        "X": 0,
+        "Y": 0.35000000000000003,
+        "Z": 0
+      },
+      "listaPuntos": [
+        {
+          "X": -0.1,
+          "Y": 0.2,
+          "Z": 0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.2,
+          "Z": 0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.2,
+          "Z": -0.05
+        },
+        {
+          "X": -0.1,
+          "Y": 0.2,
+          "Z": -0.05
+        }
+      ],
+      "color": {
+        "R": 0,
+        "G": 0,
+        "B": 0,
+        "A": 0,
+        "IsKnownColor": false,
+        "IsEmpty": true,
+        "IsNamedColor": false,
+        "IsSystemColor": false,
+        "Name": "0"
+      },
+      "primitiveType": 2,
+      "CentroDependiente": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "frente": {
+      "centro": {
+        "X": 0,
+        "Y": 0.35000000000000003,
+        "Z": 0
+      },
+      "listaPuntos": [
+        {
+          "X": -0.1,
+          "Y": 0.5,
+          "Z": 0.05
+        },
+        {
+          "X": -0.1,
+          "Y": 0.2,
+          "Z": 0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.2,
+          "Z": 0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.5,
+          "Z": 0.05
+        }
+      ],
+      "color": {
+        "R": 0,
+        "G": 0,
+        "B": 0,
+        "A": 0,
+        "IsKnownColor": false,
+        "IsEmpty": true,
+        "IsNamedColor": false,
+        "IsSystemColor": false,
+        "Name": "0"
+      },
+      "primitiveType": 2,
+      "CentroDependiente": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "atras": {
+      "centro": {
+        "X": 0,
+        "Y": 0.35000000000000003,
+        "Z": 0
+      },
+      "listaPuntos": [
+        {
+          "X": -0.1,
+          "Y": 0.5,
+          "Z": -0.05
+        },
+        {
+          "X": -0.1,
+          "Y": 0.2,
+          "Z": -0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.2,
+          "Z": -0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.5,
+          "Z": -0.05
+        }
+      ],
+      "color": {
+        "R": 0,
+        "G": 0,
+        "B": 0,
+        "A": 0,
+        "IsKnownColor": false,
+        "IsEmpty": true,
+        "IsNamedColor": false,
+        "IsSystemColor": false,
+        "Name": "0"
+      },
+      "primitiveType": 2,
+      "CentroDependiente": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "izquierda": {
+      "centro": {
+        "X": 0,
+        "Y": 0.35000000000000003,
+        "Z": 0
+      },
+      "listaPuntos": [
+        {
+          "X": -0.1,
+          "Y": 0.5,
+          "Z": 0.05
+        },
+        {
+          "X": -0.1,
+          "Y": 0.5,
+          "Z": -0.05
+        },
+        {
+          "X": -0.1,
+          "Y": 0.2,
+          "Z": -0.05
+        },
+        {
+          "X": -0.1,
+          "Y": 0.2,
+          "Z": 0.05
+        }
+      ],
+      "color": {
+        "R": 0,
+        "G": 0,
+        "B": 0,
+        "A": 0,
+        "IsKnownColor": false,
+        "IsEmpty": true,
+        "IsNamedColor": false,
+        "IsSystemColor": false,
+        "Name": "0"
+      },
+      "primitiveType": 2,
+      "CentroDependiente": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    "derecha": {
+      "centro": {
+        "X": 0,
+        "Y": 0.35000000000000003,
+        "Z": 0
+      },
+      "listaPuntos": [
+        {
+          "X": 0.1,
+          "Y": 0.5,
+          "Z": 0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.5,
+          "Z": -0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.2,
+          "Z": -0.05
+        },
+        {
+          "X": 0.1,
+          "Y": 0.2,
+          "Z": 0.05
+        }
+      ],
+      "color": {
+        "R": 0,
+        "G": 0,
+        "B": 0,
+        "A": 0,
+        "IsKnownColor": false,
+        "IsEmpty": true,
+        "IsNamedColor": false,
+        "IsSystemColor": false,
+        "Name": "0"
+      },
+      "primitiveType": 2,
+      "CentroDependiente": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    }
+  },
+  "CentroDependiente": {
+    "X": 0,
+    "Y": 0,
+    "Z": 0
+  }
+}

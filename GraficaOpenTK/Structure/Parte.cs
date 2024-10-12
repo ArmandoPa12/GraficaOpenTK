@@ -1,4 +1,5 @@
 ﻿using GraficaOpenTK.Interfaces;
+using OpenTK.Graphics.ES11;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -76,7 +77,7 @@ namespace GraficaOpenTK.Structure
             }
         }
 
-        public void escalar(double factor)
+        public void escalar(Punto factor)
         {
             foreach (var item in listaPoligonos)
             {
@@ -88,12 +89,10 @@ namespace GraficaOpenTK.Structure
         }
         public void seeCenter()
         {
-
             foreach (var item in listaPoligonos)
             {
                 item.Value.seeCenter();
-            }
-            
+            }            
         }
         public void trasladar(Punto valor)
         {
@@ -138,7 +137,12 @@ namespace GraficaOpenTK.Structure
             return new Punto(promedioX + this.CentroDependiente.X, promedioY + this.CentroDependiente.Y, promedioZ + this.CentroDependiente.Z);
         }
 
-
-
+        public void setPrimitiveType(OpenTK.Graphics.OpenGL.PrimitiveType tipo)
+        {
+            foreach (var item in listaPoligonos)
+            {
+                item.Value.setPrimitiveType(tipo);
+            }
+        }
     }
 }

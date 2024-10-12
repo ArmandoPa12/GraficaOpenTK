@@ -46,7 +46,10 @@ namespace GraficaOpenTK.Structure
             this.listaPuntos = lista;
             this.CentroDependiente = new Punto();
         }
-
+        public void setPrimitiveType(PrimitiveType tipo)
+        {
+            this.primitiveType = tipo;
+        }
         public Poligono add(Punto punto)
         {
             this.listaPuntos.Add(punto);
@@ -218,9 +221,9 @@ namespace GraficaOpenTK.Structure
 
             Punto centroMasa = this.centro;
 
-            Matrix4 matrizX = Matrix4.CreateRotationX((float)MathHelper.RadiansToDegrees(angulo.X));
-            Matrix4 matrizY = Matrix4.CreateRotationY((float)MathHelper.RadiansToDegrees(angulo.Y));
-            Matrix4 matrizZ = Matrix4.CreateRotationZ((float)MathHelper.RadiansToDegrees(angulo.Z));
+            Matrix4 matrizX = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(angulo.X));
+            Matrix4 matrizY = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(angulo.Y));
+            Matrix4 matrizZ = Matrix4.CreateRotationZ((float)MathHelper.DegreesToRadians(angulo.Z));
 
             Matrix4 rotacionTotal = matrizZ * matrizY * matrizX;
 
@@ -240,9 +243,9 @@ namespace GraficaOpenTK.Structure
 
         }
 
-        public void escalar(double factor)
+        public void escalar(Punto factor)
         {
-            Matrix4 preparar = Matrix4.CreateScale((float)factor);
+            Matrix4 preparar = Matrix4.CreateScale((float)factor.X, (float)factor.Y, (float)factor.Z);
             Vector4 resultado;
             foreach (var item in listaPuntos)
             {
