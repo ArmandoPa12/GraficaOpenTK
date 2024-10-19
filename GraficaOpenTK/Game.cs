@@ -11,6 +11,9 @@ using GraficaOpenTK.Structure;
 using GraficaOpenTK.Class;
 using GraficaOpenTK.Interfaces;
 using System.Drawing;
+using GraficaOpenTK.Structure.Transformacion;
+using System.Diagnostics;
+using GraficaOpenTK.Structure.Animation;
 
 
 namespace GraficaOpenTK
@@ -20,6 +23,8 @@ namespace GraficaOpenTK
         private float angulox;
         private float anguloy;
         private float Rotar = 1.0f;
+        private readonly Timer timer;
+        private Stopwatch stopwatch;
 
         private float angle1;
         private float angle2;
@@ -33,12 +38,16 @@ namespace GraficaOpenTK
 
         private IGrafica polimorfico;
 
-        private List<Accion> acciones = new List<Accion>();
+        //private List<Accion> acciones = new List<Accion>();
         private int index = 0;
         private double tiempoAcumulado = 0;
+        private ITransformacion t;
 
         private Objeto robot = new Objeto();
         private Parte arriba = new Parte();
+
+        private Queue<ITransformacion> acciones;
+
         public Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
         {
             ejex = 0.001;
@@ -46,7 +55,9 @@ namespace GraficaOpenTK
             camara = new Camara(this);
             inicializaraCubo();
             inicializarT();
-
+            //iniciarEsfera(0.05,10,10);
+            acciones = new Queue<ITransformacion>();
+            stopwatch = new Stopwatch();
         }
 
 
@@ -57,93 +68,7 @@ namespace GraficaOpenTK
             GL.Enable(EnableCap.DepthTest);
 
             Poligono.cartesiano();
-
-
-
-            //Parte antBrazoIzq = Serializar.openParte("IAntBraIzq");
-            //antBrazoIzq.draw();
-            //antBrazoIzq.seeCenter();
-            //antBrazoIzq.escalar(new Punto(2.5,1,1));
-
-            //Parte BrazoIzq = Serializar.openParte("IBraIzq");
-            //BrazoIzq.draw();
-            //BrazoIzq.seeCenter();
-
-            //robot.add("torso", torso).add("antBrazo", antBrazoIzq);
-
-            //escenario1.add("robot",robot);
-
-
-            //IGrafica temp1 = escenario1.getObjeto("robot").getParte("antBrazo");
-            //IGrafica temp2 = escenario1.getObjeto("robot").getParte("brazo");
-
-
-            //acciones.Add(new Accion("l","r",new Punto(0,0,40),temp1));
-
-
-            //Punto copiaC = temp2.centro;
-            //temp2.setCentro(temp1.centro);
-
-            //acciones.Add(new Accion("l", "r", new Punto(0, 0, 40),temp2,temp1.centro));
-
-
-            //// arriba
-            //Punto a = new Punto(0.1, 0.55, 0.05);
-            //Punto b = new Punto(0.1, 0.45, 0.05);
-            //Punto c = new Punto(0.35, 0.45, 0.05);
-            //Punto d = new Punto(0.35, 0.55, 0.05);
-
-            //Punto a1 = new Punto(0.1, 0.55, -0.05);
-            //Punto b1 = new Punto(0.1, 0.45, -0.05);
-            //Punto c1 = new Punto(0.35, 0.45, -0.05);
-            //Punto d1 = new Punto(0.35, 0.55, -0.05);
-
-            //Poligono aFront = new Poligono();
-            //Poligono aBack = new Poligono();
-            //Poligono aLeft = new Poligono();
-            //Poligono aRigth = new Poligono();
-            //Poligono aUp = new Poligono();
-            //Poligono aDown = new Poligono();
-
-            //PrimitiveType tipo = PrimitiveType.LineLoop;
-            //Color color = Color.Gray;
-
-            //aFront.add(a).add(b).add(c).add(d).setTipo(tipo).setColor(color);
-            //aBack.add(a1).add(b1).add(c1).add(d1).setTipo(tipo).setColor(color);
-            //aLeft.add(a).add(a1).add(b1).add(b).setTipo(tipo).setColor(color);
-            //aRigth.add(d).add(d1).add(c1).add(c).setTipo(tipo).setColor(color);
-            //aUp.add(a).add(d).add(d1).add(a1).setTipo(tipo).setColor(color);
-            //aDown.add(b).add(c).add(c1).add(b1).setTipo(tipo).setColor(color);
-
-
-
-            //arriba.add("arriba", aUp)
-            //    .add("abajo", aDown)
-            //    .add("frente", aFront)
-            //    .add("atras", aBack)
-            //    .add("izquierda", aLeft)
-            //    .add("derecha", aRigth);
-
-            //arriba.CentroDependiente = new Punto(-0.075,0.0,0);
-            //arriba.setCentro( arriba.CalcularCentroDeMasa());
-
-            //Parte parte = new Parte();
-            //parte.add("arriba", aUp)
-            //    .add("abajo", aDown)
-            //    .add("frente", aFront)
-            //    .add("atras", aBack)
-            //    .add("izquierda", aLeft)
-            //    .add("derecha", aRigth);
-            //arriba.rotar(new Punto(0, 0, -90));
-            //Serializar.saveParte("iBIzq", parte);
-
-
-            //arriba = Serializar.openParte("iBIzq");
-
-            //arriba.CentroDependiente = new Punto(0, 0.075, 0);
-            ////arriba.trasladar(new Punto(-0.3, 0, 0));
-            //arriba.setCentro(arriba.CalcularCentroDeMasa());
-            //Serializar.saveParte("iBIzq", arriba);
+            stopwatch.Start();
 
 
             Parte torso = Serializar.openParte("ITorso");
@@ -159,38 +84,40 @@ namespace GraficaOpenTK
             bDer.seeCenter();
 
 
+
             //arriba = Serializar.openParte("iBIzq");
+            Objeto esfera = Serializar.open("esfera");
 
             robot.add("torso", torso).add("izq", bIzq).add("der", bDer);
             escenario1.add("robot", robot);
+            escenario1.add("esfera", esfera);
 
-            IGrafica poli;
+
+            IGrafica letra = escenario1.getObjeto("letraT");
+            IGrafica arriba = escenario1.getObjeto("letraT").getParte("arriba");
+
+            //letra.escalar(new Punto(1.8));
+            //letra.trasladar(new Punto(-0.5, 0.1, 0.1));
+
+            //robot.escalar(new Punto(0.5));
+            //robot.trasladar(new Punto(0.7, -0.9, 0.1));
+
+            //esfera.escalar(new Punto(.6));
+            //esfera.trasladar(new Punto(-0.2, 0.365, 0.1));
 
 
-           
 
-            //--------------------
-            poli = escenario1.getObjeto("robot").getParte("der");
-            //poli.setCentro(poli.CalcularCentroDeMasa());
-            for (int i = 0; i < 17; i++)
-            {
-                acciones.Add(new Accion("l", "r", new Punto(0, 0, i), poli));
-            }
+            //acciones.Enqueue(new Trasladar(robot, new Punto(-0.4, 0, 0), 1000, 2000, "trasladar A"));
+            //acciones.Enqueue(new Trasladar(robot, new Punto(0.1, 0, 0), 2000, 2000, "trasladar B"));
+            //acciones.Enqueue(new Trasladar(robot, new Punto(0, 5, 0), 1000, 3000, "trasladar C"));
+            //acciones.Enqueue(new Trasladar(robot, new Punto(-2, 0, 0), 6000, 2000, "trasladar D"));
 
-            //--------------------
-            poli = escenario1.getObjeto("robot").getParte("izq");
-            //poli.CalcularCentroDeMasa();
 
-            for (int i = 0; i < 17; i++)
-            {
-                acciones.Add(new Accion("l", "r", new Punto(0, 0, -i), poli));
-            }
-            //--------------------
-            poli = escenario1.getObjeto("robot");
-            for (int i = 0; i < 17; i++)
-            {
-                acciones.Add(new Accion("l", "r", new Punto(0, i, 0), poli));
-            }
+            acciones.Enqueue(new Trasladar(robot, new Punto(0.5, 0, 0), 1000, 6000, "trasladar A"));
+
+
+
+
 
 
         }
@@ -199,6 +126,8 @@ namespace GraficaOpenTK
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+            const int targetFPS = 60;
+            const double targetFrameTime = 1000.0 / targetFPS;
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -209,67 +138,36 @@ namespace GraficaOpenTK
             GL.Rotate(camara.AngZ, new Vector3d(0.0, 0.0, 1.0));
             double scala = camara.Scale;
             GL.Scale(scala, scala, scala);
-            Poligono.cartesiano();
+            //Poligono.cartesiano();
+
 
 
             escenario1.draw();
-            escenario1.seeCenter();
-            this.libreto(index, e);
-
-
-            //Parte torso = Serializar.openParte("ITorso");
-            //torso.draw();
-            //torso.seeCenter();
-
-            //arriba.draw();
-            //arriba.seeCenter();
-            //arriba.rotar(new Punto(1, 0, 0));
-
-
-
+            //escenario1.seeCenter();
             //robot.draw();
-            //robot.seeCenter();
+
+            long controlTime = stopwatch.ElapsedMilliseconds;
+
+            if (acciones.Count > 0)
+            {
+                var transformacion = acciones.Dequeue();
+                if (controlTime >= transformacion.tini && controlTime <= (transformacion.tini + transformacion.tiempo))
+                {
+                    transformacion.ejecutar(controlTime);
+                    Console.WriteLine(controlTime + transformacion.n);
+                    acciones.Enqueue(transformacion);
+                }
+                else
+                {
+                    // Si aún no ha llegado el tiempo de inicio de la transformación, la volvemos a poner en la cola
+                    acciones.Enqueue(transformacion);
+                }
+            }
+
 
             GL.Flush();
 
             Context.SwapBuffers();
-        }
-
-        private void libreto(int i, FrameEventArgs e)
-        {
-            IGrafica polimorfico;
-            tiempoAcumulado += e.Time;
-            if (i < acciones.Count() && tiempoAcumulado >= 0.05)
-            {
-                if (acciones[i].accion == "t")
-                {
-                    polimorfico = acciones[i].polimorfico;
-                    polimorfico.trasladar(acciones[i].punto);
-                }
-                if (acciones[i].accion == "r")
-                {
-                    //Punto copia = acciones[i].polimorfico.centro;
-
-                    polimorfico = acciones[i].polimorfico;
-                    polimorfico.setCentro(polimorfico.CalcularCentroDeMasa());
-                    //polimorfico.setCentro(acciones[i].centroTemp);
-                    //Punto copia = polimorfico.centro; 
-                    ////acciones[i].polimorfico.setCentro();
-
-                    polimorfico.rotar(acciones[i].punto);
-
-                    //polimorfico.setCentro(copia);
-                    //polimorfico.CalcularCentroDeMasa();
-
-                }
-                if (acciones[i].accion == "e")
-                {
-                    polimorfico = acciones[i].polimorfico;
-                    polimorfico.escalar(acciones[i].punto);
-                }
-                this.index++;
-                tiempoAcumulado = 0;
-            }
         }
 
         protected override void OnResize(EventArgs e)
@@ -414,6 +312,51 @@ namespace GraficaOpenTK
 
             //escenario1.add("cubo", p);
             
+        }
+
+        public void iniciarEsfera(double radio, int resolucionLatitud, int resolucionLongitud)
+        {
+            
+            radio = Math.Min(radio, 0.9);
+
+            // Crear una parte que contendrá los polígonos (con puntos) de la esfera
+            Parte parteEsfera = new Parte();
+
+            // Crear un polígono para la esfera
+            Poligono poligonoEsfera = new Poligono();
+
+            // Generar los puntos de la esfera usando latitudes y longitudes
+            for (int i = 0; i <= resolucionLatitud; i++)
+            {
+                double theta = Math.PI * i / resolucionLatitud;  // Ángulo de latitud (de 0 a π)
+
+                for (int j = 0; j <= resolucionLongitud; j++)
+                {
+                    double phi = 2 * Math.PI * j / resolucionLongitud;  // Ángulo de longitud (de 0 a 2π)
+
+                    // Calcular los puntos en la superficie de la esfera
+                    double x = radio * Math.Sin(theta) * Math.Cos(phi);
+                    double y = radio * Math.Sin(theta) * Math.Sin(phi);
+                    double z = radio * Math.Cos(theta);
+
+                    // Crear un punto con las coordenadas calculadas
+                    Punto puntoEsfera = new Punto(x, y, z);
+                    // Añadir el punto al polígono
+                    poligonoEsfera.add(puntoEsfera);
+                }
+            }
+
+
+            // Añadir el polígono generado a la parte de la esfera
+            parteEsfera.add("poligono_esfera", poligonoEsfera);
+
+            Objeto esfera = new Objeto();
+            esfera.add("esfera", parteEsfera);
+
+            Serializar.save("esfera",esfera);
+            //esfera.escalar(new Punto(1.2));
+            //escenario1.add("esfera", esfera);
+
         }
 
         public void inicializarT()
