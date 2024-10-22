@@ -133,10 +133,41 @@ namespace GraficaOpenTK.Structure
 
         public void seeCenter()
         {
-            foreach (var item in listaPartes)
-            {
-                item.Value.seeCenter();
-            }
+            double size = 0.005;  // Ajusta este tamaño para que sea visible pero pequeño
+
+            // Dibuja un pequeño cuadrado centrado en el centro de masa
+            GL.Begin(PrimitiveType.Quads);
+            GL.Color4(Color.White);  // Color del centro de masa
+
+            // Esquinas del cuadrado
+            GL.Vertex3(centro.X - size, centro.Y - size, centro.Z);
+            GL.Vertex3(centro.X + size, centro.Y - size, centro.Z);
+            GL.Vertex3(centro.X + size, centro.Y + size, centro.Z);
+            GL.Vertex3(centro.X - size, centro.Y + size, centro.Z);
+
+            GL.End();
+
+            // Dibuja líneas de referencia para los ejes
+            GL.Begin(PrimitiveType.Lines);
+
+            // Eje X en rojo
+            GL.Color4(Color.Red);
+            GL.Vertex3(centro.X - 0.05f, centro.Y, centro.Z);  // Extremo negativo del eje X
+            GL.Vertex3(centro.X + 0.05f, centro.Y, centro.Z);  // Extremo positivo del eje X
+
+            // Eje Y en verde
+            GL.Color4(Color.Green);
+            GL.Vertex3(centro.X, centro.Y - 0.05f, centro.Z);  // Extremo negativo del eje Y
+            GL.Vertex3(centro.X, centro.Y + 0.05f, centro.Z);  // Extremo positivo del eje Y
+
+            // Eje Z en azul
+            GL.Color4(Color.Blue);
+            GL.Vertex3(centro.X, centro.Y, centro.Z - 0.05f);  // Extremo negativo del eje Z
+            GL.Vertex3(centro.X, centro.Y, centro.Z + 0.05f);  // Extremo positivo del eje Z
+
+            GL.End();
+
+            GL.Flush();  // Asegura que todas las operaciones de OpenGL se ejecuten
         }
 
         public void setPrimitiveType(PrimitiveType tipo)

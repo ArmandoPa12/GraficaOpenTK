@@ -33,7 +33,9 @@ namespace GraficaOpenTK.Structure
 
         public override string ToString()
         {
-            return X.ToString() + "-" + Y.ToString() + "-" + Z.ToString();
+            //return X.ToString() + "-" + Y.ToString() + "-" + Z.ToString();
+
+            return $"X{X:F2}|Y{Y:F2}|Z{Z:F2}|";
 
         }
         public static Punto operator +(Punto p1, Punto p2)

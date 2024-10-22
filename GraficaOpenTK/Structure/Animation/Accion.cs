@@ -7,13 +7,26 @@ using GraficaOpenTK.Interfaces;
 
 namespace GraficaOpenTK.Structure.Animation
 {
-    internal class Accion
+    internal class Accion : IAnimacion
     {
         public List<ITransformacion> listaTransformacion;
 
-        public Accion()
+        public Accion(ITransformacion transformacion)
         {
-            
+            listaTransformacion = new List<ITransformacion> { transformacion };
+        }
+
+        public void add(ITransformacion transformacion)
+        {
+            listaTransformacion.Add(transformacion);
+        }
+
+        public void play(long control)
+        {
+            foreach (var item in listaTransformacion)
+            {
+                item.ejecutar(control);
+            }
         }
     }
 }

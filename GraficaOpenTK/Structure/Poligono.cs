@@ -167,53 +167,62 @@ namespace GraficaOpenTK.Structure
 
         public static void cartesiano(double escala = 0.1f)
         {
-            PrimitiveType tipo = PrimitiveType.LineLoop;
+            // Definir el tipo de primitivas
+            PrimitiveType tipo = PrimitiveType.Lines;
+
+            // Ancho de las líneas menores
             double width = 0.02f;
 
+            // Eje X (rojo)
             GL.Begin(tipo);
             GL.Color4(Color.Red);
-            GL.Vertex3(4f, 0f, 0);
-            GL.Vertex3(-4f, 0f, 0);
+            GL.Vertex3(4f, 0f, 0f);   // Extremo positivo del eje X
+            GL.Vertex3(-4f, 0f, 0f);  // Extremo negativo del eje X
             GL.End();
 
+            // Líneas menores a lo largo del eje X
+            GL.Begin(tipo);
             for (double i = -4f; i <= 4f; i += escala)
             {
-                GL.Begin(PrimitiveType.Lines);
                 GL.Color4(Color.Red);
-                GL.Vertex3(i, -width, 0);
-                GL.Vertex3(i, width, 0);
-                GL.End();
+                GL.Vertex3(i, -width, 0f);
+                GL.Vertex3(i, width, 0f);
             }
+            GL.End();
 
-
+            // Eje Y (verde)
             GL.Begin(tipo);
             GL.Color4(Color.Green);
-            GL.Vertex3(0f, 4f, 0);
-            GL.Vertex3(0f, -4f, 0);
+            GL.Vertex3(0f, 4f, 0f);   // Extremo positivo del eje Y
+            GL.Vertex3(0f, -4f, 0f);  // Extremo negativo del eje Y
             GL.End();
+
+            // Líneas menores a lo largo del eje Y
+            GL.Begin(tipo);
             for (double i = -4f; i <= 4f; i += escala)
             {
-                GL.Begin(PrimitiveType.Lines);
                 GL.Color4(Color.Green);
-                GL.Vertex3(-width, i, 0);
-                GL.Vertex3(width, i, 0);
-                GL.End();
+                GL.Vertex3(-width, i, 0f);
+                GL.Vertex3(width, i, 0f);
             }
+            GL.End();
 
-
+            // Eje Z (azul)
             GL.Begin(tipo);
             GL.Color4(Color.Blue);
-            GL.Vertex3(0f, 0f, 4f);
-            GL.Vertex3(0f, 0f, -4f);
+            GL.Vertex3(0f, 0f, 4f);   // Extremo positivo del eje Z
+            GL.Vertex3(0f, 0f, -4f);  // Extremo negativo del eje Z
             GL.End();
+
+            // Líneas menores a lo largo del eje Z
+            GL.Begin(tipo);
             for (double i = -4f; i <= 4f; i += escala)
             {
-                GL.Begin(PrimitiveType.Lines);
                 GL.Color4(Color.Blue);
-                GL.Vertex3(0, i, -width);
-                GL.Vertex3(0, i, width);
-                GL.End();
+                GL.Vertex3(0f, -width, i);
+                GL.Vertex3(0f, width, i);
             }
+            GL.End();
         }
 
         public void rotar(Punto angulo)

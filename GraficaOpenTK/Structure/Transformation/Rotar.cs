@@ -11,27 +11,38 @@ namespace GraficaOpenTK.Structure.Transformacion
     {
         public Punto operacion { get; set; }
         public IGrafica objeto { get; set; }
-        public Punto final { get; set; }
-        public long tiempo { get; set; }
-        public long tini { get; set; }
-        public string n { get; set; }
+        public Punto puntoFinal { get; set; }
+        public long tTotal { get; set; }
+        public long tInicio { get; set; }
+        public string texto { get; set; }
         
         public Rotar(IGrafica obj, Punto final, long inicio, long tiempo, string n = "n")
         {
             this.objeto = obj;
             this.operacion = new Punto();
-            this.final = final;
-            this.tiempo = tiempo;
-            this.tini = inicio;
-            this.n = n;
+            this.puntoFinal = final;
+            this.tTotal = tiempo;
+            this.tInicio = inicio;
+            this.texto = n;
         }
         public void ejecutar(long control)
         {
-            double nuevoX = this.final.X / this.tiempo;
-            double nuevoY = this.final.Y / this.tiempo;
-            double nuevoZ = this.final.Z / this.tiempo;
-            Punto nuevaPosicion = new Punto(nuevoX * 10, nuevoY * 10, nuevoZ * 10);
-            this.objeto.rotar(nuevaPosicion);
+            if (control >= this.tInicio && control <= (this.tInicio + this.tTotal))
+            {
+                //Console.WriteLine(this.texto + "--" + ((this.puntoFinal.X - this.objeto.centro.X) / this.tTotal) * 100);
+                double nuevoX = (this.puntoFinal.X - this.objeto.centro.X) / this.tTotal;
+                double nuevoY = (this.puntoFinal.Y - this.objeto.centro.Y) / this.tTotal;
+                double nuevoZ = (this.puntoFinal.Z - this.objeto.centro.Z) / this.tTotal;
+
+                Punto res = new Punto(nuevoX * 100, nuevoY * 100, nuevoZ * 100);
+
+                this.objeto.rotar(res);
+            }
+            //double nuevoX = this.puntoFinal.X / this.tTotal;
+            //double nuevoY = this.puntoFinal.Y / this.tTotal;
+            //double nuevoZ = this.puntoFinal.Z / this.tTotal;
+            //Punto nuevaPosicion = new Punto(nuevoX * 10, nuevoY * 10, nuevoZ * 10);
+            //this.objeto.rotar(nuevaPosicion);
         }
         public void setOperacion(Punto operacion)
         {

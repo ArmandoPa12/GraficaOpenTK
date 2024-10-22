@@ -47,17 +47,22 @@ namespace GraficaOpenTK
         private Parte arriba = new Parte();
 
         private Queue<ITransformacion> acciones;
+        private Libreto libreto1;
 
         public Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
         {
+            TargetUpdateFrequency = 60.0;  // Actualizaciones a 60 UPS
+            TargetRenderFrequency = 60.0;  // Renderizado a 60 FPS
+
             ejex = 0.001;
             escenario1 = new Escenario();
             camara = new Camara(this);
             inicializaraCubo();
             inicializarT();
-            //iniciarEsfera(0.05,10,10);
+            //iniciarEsfera(0.05, 10, 10);
             acciones = new Queue<ITransformacion>();
             stopwatch = new Stopwatch();
+            libreto1 = new Libreto();
         }
 
 
@@ -96,15 +101,21 @@ namespace GraficaOpenTK
             IGrafica letra = escenario1.getObjeto("letraT");
             IGrafica arriba = escenario1.getObjeto("letraT").getParte("arriba");
 
-            //letra.escalar(new Punto(1.8));
-            //letra.trasladar(new Punto(-0.5, 0.1, 0.1));
+            letra.escalar(new Punto(1.8));
+            letra.trasladar(new Punto(-0.5, 0.1, 0.1));
 
-            //robot.escalar(new Punto(0.5));
-            //robot.trasladar(new Punto(0.7, -0.9, 0.1));
+            robot.escalar(new Punto(0.5));
+            robot.trasladar(new Punto(0.7, -0.8, 0.1));
 
-            //esfera.escalar(new Punto(.6));
-            //esfera.trasladar(new Punto(-0.2, 0.365, 0.1));
+            esfera.escalar(new Punto(.6));
+            esfera.trasladar(new Punto(-0.2, 0.365, 0.1));
 
+            escenario1.trasladar(new Punto(0,0.55,0));
+
+            //robot.centro = robot.CalcularCentroDeMasa();
+            //Console.WriteLine(robot.centro.ToString());
+            //robot.trasladar(new Punto(0.2,0,0));
+            //Console.WriteLine(robot.centro.ToString());
 
 
             //acciones.Enqueue(new Trasladar(robot, new Punto(-0.4, 0, 0), 1000, 2000, "trasladar A"));
@@ -112,10 +123,26 @@ namespace GraficaOpenTK
             //acciones.Enqueue(new Trasladar(robot, new Punto(0, 5, 0), 1000, 3000, "trasladar C"));
             //acciones.Enqueue(new Trasladar(robot, new Punto(-2, 0, 0), 6000, 2000, "trasladar D"));
 
+            //Trasladar a = new Trasladar(robot, new Punto(0.5, 0.2, 0.1), 1000, 1000, "trasladar A");
 
-            acciones.Enqueue(new Trasladar(robot, new Punto(0.5, 0, 0), 1000, 6000, "trasladar A"));
+
+            //Console.WriteLine(a.calcular().ToString());
 
 
+
+            //libreto1.add(new Escena(new Accion(b)));
+
+            //acciones.Enqueue(new Trasladar(robot, new Punto(0.5, 0, 0), 1000, 1000, "X"));
+            //acciones.Enqueue(new Trasladar(esfera, new Punto(0.5, 0.2, 0.1), 1000, 1000, "Y"));
+            //acciones.Enqueue(new Trasladar(esfera, new Punto(0.5, 0.2, 0.1), 1000, 1000, "Z"));
+
+
+
+            //acciones.Enqueue(new Rotar(robot, new Punto(45, 0, 0), 4000, 1000, "trasladar A"));
+
+
+            //libreto1.add(new Escena(new Accion(new Escalar(robot, new Punto(1.2), 1000, 1000, "X"))));
+            //libreto1.add(new Escena(new Accion(new Rotar(esfera, new Punto(10, 10, 10), 2000, 1000, "Y"))));
 
 
 
@@ -138,31 +165,44 @@ namespace GraficaOpenTK
             GL.Rotate(camara.AngZ, new Vector3d(0.0, 0.0, 1.0));
             double scala = camara.Scale;
             GL.Scale(scala, scala, scala);
-            //Poligono.cartesiano();
+            Poligono.cartesiano();
 
+
+            double fps = 1.0 / e.Time;
+            //Console.WriteLine($"FPS: {fps:F2}");
 
 
             escenario1.draw();
-            //escenario1.seeCenter();
+            escenario1.seeCenter();
             //robot.draw();
 
-            long controlTime = stopwatch.ElapsedMilliseconds;
 
-            if (acciones.Count > 0)
-            {
-                var transformacion = acciones.Dequeue();
-                if (controlTime >= transformacion.tini && controlTime <= (transformacion.tini + transformacion.tiempo))
-                {
-                    transformacion.ejecutar(controlTime);
-                    Console.WriteLine(controlTime + transformacion.n);
-                    acciones.Enqueue(transformacion);
-                }
-                else
-                {
-                    // Si aún no ha llegado el tiempo de inicio de la transformación, la volvemos a poner en la cola
-                    acciones.Enqueue(transformacion);
-                }
-            }
+
+
+            long controlTime = stopwatch.ElapsedMilliseconds;
+            long x = stopwatch.ElapsedTicks;
+
+            libreto1.play(controlTime);
+            //Console.WriteLine(x);
+
+            //if (acciones.Count > 0)
+            //{
+            //    var transformacion = acciones.Dequeue();
+            //    if (controlTime >= transformacion.tInicio && controlTime <= (transformacion.tInicio + transformacion.tTotal))
+            //    {
+            //        transformacion.ejecutar(controlTime);
+            //        //Console.WriteLine(controlTime + transformacion.n);
+            //        acciones.Enqueue(transformacion);
+            //    }
+            //    else
+            //    {
+            //        // Si aún no ha llegado el tiempo de inicio de la transformación, la volvemos a poner en la cola
+            //        acciones.Enqueue(transformacion);
+            //        //bi-cola
+            //        // getTick
+            //        // getFPS
+            //    }
+            //}
 
 
             GL.Flush();
